@@ -1,6 +1,7 @@
 # imports and extensions
 import discord
 from discord.ext import commands
+import tic_tac_toe
 
 # loading token
 with open('token.txt') as file:
@@ -18,6 +19,8 @@ async def on_ready():
         print(f"Currently listening to {len(synced)} command(s).")
     except Exception as e:
         print(e)
+    #user = await bot.fetch_user("721404393664020560")
+    #await user.send("Hello there, I am online now!")
 
 
 # running bot with token
