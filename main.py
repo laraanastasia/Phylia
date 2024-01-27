@@ -45,6 +45,160 @@ async def lecture(interaction: discord.ui.Button):
     message=await interaction.response.send_message(embed=printing_lecture, view = embed_buttons())
     print(type(message))
 
+def get_firstmonday_jan():
+  jan1 = datetime(int(year), month, 1, 0, 0, 0, 0).weekday()
+  for i in range(0,6):
+    if jan1 == 0:
+        firstmonday_jan = datetime(int(year), month, 1, 12, 0, 0, 0)
+    else:
+        firstmonday_jan = datetime(int(year), month, 1, 12, 0, 0, 0) + timedelta(days=7-i)
+  return firstmonday_jan
+
+def get_firstmondaymonth(month,week):
+    if month == 1:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=0)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=7)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=14)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=21)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=28) 
+    elif month == 2:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=31)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=38)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=45)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=52)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=59)         
+    elif month == 3:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=60)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=67)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=74)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=81)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=88) 
+    elif month == 4:
+            if week == 1:  
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=91)
+                print(firstmonday_month)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=98)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=105)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=112)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=119) 
+    elif month == 5:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=121)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=128)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=135)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=142)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=149) 
+    elif month == 6:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=152)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=159)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=166)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=173)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=180) 
+    elif month == 7:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=182)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=189)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=196)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=203)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=210) 
+    elif month == 8:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=213)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=220)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=227)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=234)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=241) 
+    elif month == 9:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=244)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=251)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=258)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=265)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=272) 
+    elif month == 10:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=274)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=281)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=289)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=296)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=303) 
+    elif month == 11:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=305)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=312)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=319)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=326)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=333) 
+    elif month == 12:
+            if week == 1:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=335)
+            elif week == 2:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=342)
+            elif week == 3:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=349)
+            elif week == 4:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=356)
+            elif week == 5:
+                firstmonday_month = get_firstmonday_jan() + timedelta(days=363) 
+    return firstmonday_month
+
+def set_month(input):
+       global month
+       month = input
+       return month
+
+def set_week(input):
+       global week
+       week = input
+       return week
 
 # Function called by buttonsclass (semi-copied)
 async def lecture_data(date_entry):
@@ -98,7 +252,7 @@ async def lecture_data(date_entry):
                                 event['room']
                             ]
                             lecture_lists.append(lecture_info)
-                        
+    print(month)                   
     # Adding the lecture data to the embed
     for i in range(lecturecounter):
         embed.add_field(name="┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄",value='',inline=True)
@@ -112,7 +266,7 @@ class embed_buttons(discord.ui.View):
     interaction=discord.Interaction
     @discord.ui.button(custom_id = f"{interaction.id}~days_button",label="ay", style=discord.ButtonStyle.gray,row=1,emoji="🇩")
     async def days_callback(self, interaction:discord.Interaction, button):
-            await interaction.message.edit(view=buttons(interaction,4,1,datetime.today().strftime("%Y")))
+            await interaction.message.edit(view=buttons(interaction,4,month,datetime.today().strftime("%Y")))
             await interaction.response.defer()
         #await interaction.response.send_message(view=buttons(interaction,4,1,datetime.today().strftime("%Y")))
     @discord.ui.button(custom_id = f"{interaction.id}~week_button",label="eek", style=discord.ButtonStyle.gray,row=1,emoji="🇼")
@@ -150,6 +304,7 @@ async def buttons_callback(interaction: discord.Interaction):
                       await interaction.response.defer()
 
 class WeekSelection(discord.ui.View):
+                print(f"This is the month{month}")
                 # the decorator that lets you specify the properties of the select menu 
                 @discord.ui.select(
                     placeholder = "Choose a week!", # the placeholder text that will be displayed if nothing is selected
@@ -158,23 +313,23 @@ class WeekSelection(discord.ui.View):
                     options = [ # the list of options from which users can choose, a required field
                     discord.SelectOption(
                         label="Week 1",
-                        description= f"",
+                        description= f"{(get_firstmondaymonth(month,1)).strftime("%d.%m")} - {(get_firstmondaymonth(month,1)+timedelta(days=4)).strftime("%d.%m")}",
                     ),
                     discord.SelectOption(
                         label="Week 2",
-                        description="08.01-12.01"
+                        description=f"{(get_firstmondaymonth(month,2)).strftime("%d.%m")} - {(get_firstmondaymonth(month,2)+timedelta(days=4)).strftime("%d.%m")}",
                     ),
                     discord.SelectOption(
                         label="Week 3",
-                        description="15.01-19.01"
+                        description=f"{(get_firstmondaymonth(month,3)).strftime("%d.%m")} - {(get_firstmondaymonth(month,3)+timedelta(days=4)).strftime("%d.%m")}",
                     ),
                     discord.SelectOption(
                         label="Week 4",
-                        description="22.01-26.01"
+                        description=f"{(get_firstmondaymonth(month,4)).strftime("%d.%m")} - {(get_firstmondaymonth(month,4)+timedelta(days=4)).strftime("%d.%m")}",
                     ),
                     discord.SelectOption(
                         label="Week 5",
-                        description="29.01-03.02"
+                        description=f"{(get_firstmondaymonth(month,5)).strftime("%d.%m")} - {(get_firstmondaymonth(month,5)+timedelta(days=4)).strftime("%d.%m")}",
                     ) 
                         ])
                 async def select_callback(self,interaction,select): # the function called when the user is done selecting options
@@ -239,7 +394,8 @@ class MonthSelection(discord.ui.View):
                     )
                # this function is triggered when you hit the month-menu, the function defines the buttons new
                async def select_callback(self,interaction,select): # the function called when the user is done selecting options
-                  if select.values[0] == "January":   
+                  if select.values[0] == "January":  
+                        set_month(1)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(1),year))
                         await interaction.response.defer()
                   elif select.values[0] == "February":
@@ -275,23 +431,10 @@ class MonthSelection(discord.ui.View):
                   else:
                         await interaction.message.edit(view=buttons(interaction,week,set_month(12),year))
                         await interaction.response.defer()
-def set_month(input):
-       global month
-       month = input
-       return month
 
-def set_week(input):
-       global week
-       week = input
-       return week
-def get_firstmonday_jan():
-  jan1 = datetime(int(year), 1, 1, 0, 0, 0, 0).weekday()
-  for i in range(0,6):
-    if jan1() == 0:
-        firstmonday_jan = datetime(int(year), 1, 1, 12, 0, 0, 0)
-    else:
-        firstmonday_jan = datetime(int(year), 1, 1, 12, 0, 0, 0) + timedelta(days=7-i)
-  return firstmonday_jan    
+
+
+
 # Running bot with token
 bot.run(token[0])
 
