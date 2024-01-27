@@ -204,6 +204,7 @@ async def lecture_data(date_entry):
                 # Extract and print events
                 target_date_events = []
                 for event in cal.walk('VEVENT'):
+                        print("Hello ")
                         start_time = event.get('dtstart').dt
                        
                         #print(start_time)
@@ -305,8 +306,6 @@ async def buttons(interaction: discord.Interaction):
                             j = (Button(custom_id = f"{interaction.id}~{firstmonday+timedelta(days=temp2)}",style=discord.ButtonStyle.blurple, label=str((firstmonday+timedelta(days=j)).strftime("%d.%m")),row=1))
                             view.add_item(j)
                             j.callback = lambda j: callback2(j)
-                            
-              
               return view
         
                                  
