@@ -24,7 +24,7 @@ message = ''
 week = 1
 month = 1
 year = date.today().year
-
+select = None
 
 # ready-message
 @bot.event
@@ -39,7 +39,7 @@ async def on_ready():
 # Lecture command for getting todays lecture-plan
 @bot.tree.command(name="lecture")
 async def lecture(interaction: discord.ui.Button):
-    channel = bot.get_channel(1184076609779671111)
+    
     printing_lecture = await lecture_data(date.today()+timedelta(days=2))
     global message    
     message=await interaction.response.send_message(embed=printing_lecture, view = embed_buttons())
@@ -49,9 +49,9 @@ def get_firstmonday_jan():
   jan1 = datetime(int(year), month, 1, 0, 0, 0, 0).weekday()
   for i in range(0,6):
     if jan1 == 0:
-        firstmonday_jan = datetime(int(year), month, 1, 12, 0, 0, 0)
+        firstmonday_jan = datetime(int(year), 1, 1, 12, 0, 0, 0)
     else:
-        firstmonday_jan = datetime(int(year), month, 1, 12, 0, 0, 0) + timedelta(days=7-i)
+        firstmonday_jan = datetime(int(year), 1, 1, 12, 0, 0, 0) + timedelta(days=7-i)
   return firstmonday_jan
 
 def get_firstmondaymonth(month,week):
@@ -271,7 +271,7 @@ class embed_buttons(discord.ui.View):
         #await interaction.response.send_message(view=buttons(interaction,4,1,datetime.today().strftime("%Y")))
     @discord.ui.button(custom_id = f"{interaction.id}~week_button",label="eek", style=discord.ButtonStyle.gray,row=1,emoji="🇼")
     async def weeks_callback(self, interaction:discord.Interaction, button):
-        await interaction.message.edit(view=WeekSelection())
+        await interaction.message.edit(view=WeekSelectionView(interaction))
         await interaction.response.defer()
     @discord.ui.button(custom_id = f"{interaction.id}~month:button",label="onth", style=discord.ButtonStyle.gray,row=1,emoji="🇲")
     async def month_callback(self, interaction:discord.Interaction, button):
@@ -303,10 +303,23 @@ async def buttons_callback(interaction: discord.Interaction):
                       await interaction.message.edit(embed = await lecture_data(datetime.strptime(date,"%Y-%m-%d %H:%M:%S").date()), view = embed_buttons())
                       await interaction.response.defer()
 
-class WeekSelection(discord.ui.View):
-                print(f"This is the month{month}")
-                # the decorator that lets you specify the properties of the select menu 
-                @discord.ui.select(
+async def callback(interaction:discord.Interaction):
+       
+       await interaction.response.defer()
+       
+            
+# the decorator that lets you specify the properties of the select menu
+class WeekSelectionView(discord.ui.View):
+    def __init__(self,interaction:discord.Interaction):
+        super().__init__()
+        self.select = WeekSelection()
+        self.select.callback = lambda j: callback(interaction)
+        self.add_item(self.select)
+        
+     
+          
+def WeekSelection():     
+                select = discord.ui.Select(
                     placeholder = "Choose a week!", # the placeholder text that will be displayed if nothing is selected
                     min_values = 1, # the minimum number of values that must be selected by the users
                     max_values = 1, # the maximum number of values that can be selected by the users
@@ -331,11 +344,11 @@ class WeekSelection(discord.ui.View):
                         label="Week 5",
                         description=f"{(get_firstmondaymonth(month,5)).strftime("%d.%m")} - {(get_firstmondaymonth(month,5)+timedelta(days=4)).strftime("%d.%m")}",
                     ) 
-                        ])
-                async def select_callback(self,interaction,select): # the function called when the user is done selecting options
-                    
-                        await interaction.response.send_message()
-                            
+                    ]   
+                    )
+                
+                return select
+
 class MonthSelection(discord.ui.View):
                @discord.ui.select( # the decorator that lets you specify the properties of the select menu 
                     placeholder = "Choose a month!", # the placeholder text that will be displayed if nothing is selected
@@ -384,7 +397,7 @@ class MonthSelection(discord.ui.View):
                     ),
                     discord.SelectOption(
                         label="November",
-                        description="eleventh"
+                        description="eleventh month"
                     ),
                     discord.SelectOption(
                         label="Dezember",
@@ -394,8 +407,7 @@ class MonthSelection(discord.ui.View):
                     )
                # this function is triggered when you hit the month-menu, the function defines the buttons new
                async def select_callback(self,interaction,select): # the function called when the user is done selecting options
-                  if select.values[0] == "January":  
-                        set_month(1)
+                  if select.values[0] == "January": 
                         await interaction.message.edit(view=buttons(interaction,week,set_month(1),year))
                         await interaction.response.defer()
                   elif select.values[0] == "February":
