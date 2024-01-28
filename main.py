@@ -16,16 +16,16 @@ with open('token.txt') as file:
 
 # bot declaration
 bot = commands.Bot(command_prefix="!",intents = discord.Intents.all())
-
-
+global counter
 counter = 0
 lecturecounter = 0
+currentdate = date.today()
 message = ''
 week = 1
 month = 1
 year = date.today().year
 select = None
-
+day = 1
 # ready-message
 @bot.event
 async def on_ready():
@@ -39,11 +39,11 @@ async def on_ready():
 # Lecture command for getting todays lecture-plan
 @bot.tree.command(name="lecture")
 async def lecture(interaction: discord.ui.Button):
-    
-    printing_lecture = await lecture_data(date.today()+timedelta(days=2))
+    global lecturecounter
+    lecturecounter = 0
+    printing_lecture = await lecture_data(date.today()+timedelta(days=1))
     global message    
-    message=await interaction.response.send_message(embed=printing_lecture, view = embed_buttons())
-    print(type(message))
+    message = await interaction.response.send_message(embed=printing_lecture, view = embed_buttons())
 
 def get_firstmonday_jan():
   jan1 = datetime(int(year), month, 1, 0, 0, 0, 0).weekday()
@@ -91,7 +91,6 @@ def get_firstmondaymonth(month,week):
     elif month == 4:
             if week == 1:  
                 firstmonday_month = get_firstmonday_jan() + timedelta(days=91)
-                print(firstmonday_month)
             elif week == 2:
                 firstmonday_month = get_firstmonday_jan() + timedelta(days=98)
             elif week == 3:
@@ -252,36 +251,50 @@ async def lecture_data(date_entry):
                                 event['room']
                             ]
                             lecture_lists.append(lecture_info)
-    print(month)                   
+                 
     # Adding the lecture data to the embed
-    for i in range(lecturecounter):
-        embed.add_field(name="┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄",value='',inline=True)
-        embed.add_field(name="__"+lecture_lists[i][0]+"__:",value="- Beginn: "+"*"+lecture_lists[i][1]+"*"+ "   ┃   Ende: *"+lecture_lists[i][2]+"*"+ "\n"+"- Raum: *"+lecture_lists[i][3]+"*", inline=False)
-        embed.set_footer(text="‎ ",icon_url="https://cdn.discordapp.com/attachments/909054108235862066/1178115964152328232/guycoding.png?ex=65beccfe&is=65ac57fe&hm=e434044069bea56e66c39fd651e713d7f189e84f069ad0f9ea89c98a012eaaac&")
-    embed.set_image(url="https://cdn.discordapp.com/attachments/909054108235862066/1200276858088988682/541px-DHBW-Logo-2-2.webp?ex=65c597ef&is=65b322ef&hm=d04afcf8052adc2620286cc74f3fd58512542d6ce186ab5dd60d98f088335a9a&")
-    return embed 
+    try:    
+        for i in range(lecturecounter):
+            embed.add_field(name="┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄",value='',inline=True)
+            embed.add_field(name="__"+lecture_lists[i][0]+"__:",value="- Beginn: "+"*"+lecture_lists[i][1]+"*"+ "   ┃   Ende: *"+lecture_lists[i][2]+"*"+ "\n"+"- Raum: *"+lecture_lists[i][3]+"*", inline=False)
+            embed.set_footer(text="‎ ",icon_url="https://cdn.discordapp.com/attachments/909054108235862066/1178115964152328232/guycoding.png?ex=65beccfe&is=65ac57fe&hm=e434044069bea56e66c39fd651e713d7f189e84f069ad0f9ea89c98a012eaaac&")
+        embed.set_image(url="https://cdn.discordapp.com/attachments/909054108235862066/1200276858088988682/541px-DHBW-Logo-2-2.webp?ex=65c597ef&is=65b322ef&hm=d04afcf8052adc2620286cc74f3fd58512542d6ce186ab5dd60d98f088335a9a&")
+        
+        return embed
+    except Exception as e:
+         print(e)
+    
     
 # class for creating embed_buttons
 class embed_buttons(discord.ui.View):
     interaction=discord.Interaction
     @discord.ui.button(custom_id = f"{interaction.id}~days_button",label="ay", style=discord.ButtonStyle.gray,row=1,emoji="🇩")
     async def days_callback(self, interaction:discord.Interaction, button):
-            await interaction.message.edit(view=buttons(interaction,4,month,datetime.today().strftime("%Y")))
-            await interaction.response.defer()
+            if counter == 0:
+                 await interaction.response.defer()
+            await interaction.message.edit(view=buttons(interaction,week,month,datetime.today().strftime("%Y")),)
         #await interaction.response.send_message(view=buttons(interaction,4,1,datetime.today().strftime("%Y")))
     @discord.ui.button(custom_id = f"{interaction.id}~week_button",label="eek", style=discord.ButtonStyle.gray,row=1,emoji="🇼")
     async def weeks_callback(self, interaction:discord.Interaction, button):
-        await interaction.message.edit(view=WeekSelectionView(interaction))
-        await interaction.response.defer()
+        if counter == 0:
+                 await interaction.response.defer()
+        global message
+        message = await interaction.message.edit(view=WeekSelectionView(interaction))
+        #select.callback = lambda j: menu_callback(select,interaction) 
+    
     @discord.ui.button(custom_id = f"{interaction.id}~month:button",label="onth", style=discord.ButtonStyle.gray,row=1,emoji="🇲")
     async def month_callback(self, interaction:discord.Interaction, button):
+        if counter == 0:
+                 await interaction.response.defer()
         await interaction.message.edit(view=MonthSelection())
-        await interaction.response.defer()
-        
+
 def buttons(interaction:discord.Interaction,week,month,year):
      # creating buttons
+            global day
             day = 1
-            days = day + week*7
+            
+            counter = 0
+            days = day + 7*(week-1)
             currentdate = datetime(int(year), month, days, 0, 0, 0, 0)
             buttons_view = View()
             for j in range(0,5):
@@ -300,25 +313,31 @@ async def buttons_callback(interaction: discord.Interaction):
                       date = interaction.data['custom_id'].split('~')[1]
                       global lecturecounter
                       lecturecounter = 0
-                      await interaction.message.edit(embed = await lecture_data(datetime.strptime(date,"%Y-%m-%d %H:%M:%S").date()), view = embed_buttons())
-                      await interaction.response.defer()
-
-async def callback(interaction:discord.Interaction):
-       
-       await interaction.response.defer()
-       
+                      global currentdate
+                      currentdate = interaction.data['custom_id'].split('~')[1]
+                      print(f"Currentdate is {currentdate}")
+                      global day
+                      day = int(datetime.strptime(date,"%Y-%m-%d %H:%M:%S").date().strftime("%d"))
+                      print(f"Currentdate is {day}")
+                      print(counter)
+                      if counter == 0:
+                        await interaction.response.defer()
+                      await interaction.message.edit(embed = await lecture_data(datetime.strptime(date,"%Y-%m-%d %H:%M:%S").date()),view = embed_buttons())
+                      
+                    
             
 # the decorator that lets you specify the properties of the select menu
 class WeekSelectionView(discord.ui.View):
+    
     def __init__(self,interaction:discord.Interaction):
         super().__init__()
         self.select = WeekSelection()
-        self.select.callback = lambda j: callback(interaction)
+        global select
+        select = self.select
         self.add_item(self.select)
-        
-     
-          
-def WeekSelection():     
+
+def WeekSelection():
+                global select 
                 select = discord.ui.Select(
                     placeholder = "Choose a week!", # the placeholder text that will be displayed if nothing is selected
                     min_values = 1, # the minimum number of values that must be selected by the users
@@ -346,7 +365,36 @@ def WeekSelection():
                     ) 
                     ]   
                     )
-                
+                @bot.event
+                async def on_interaction(interaction):
+                    global week
+                    if select.values[0] == "Week 1":
+                         
+                         week = 1
+                         print("Week1")
+                    elif select.values[0] == "Week 2":
+                         
+                         week = 2
+                         print("Week 2")
+                    elif select.values[0] == "Week 3":
+                         
+                         week = 3
+                         print("Week 3")
+                    elif select.values[0] == "Week 4":
+                        
+                         week = 4
+                         print("Week 4")
+                    elif select.values[0] == "Week 5":
+                         
+                         week = 5
+                         print("Week 5")
+                    global counter
+                    counter = 1   
+                    await interaction.message.edit(view=buttons(interaction,week,month,year))
+                    #await interaction.response.defer()
+                    #channel = bot.get_channel(1184076609779671111)
+                    
+                    await interaction.response.defer()
                 return select
 
 class MonthSelection(discord.ui.View):
@@ -407,42 +455,66 @@ class MonthSelection(discord.ui.View):
                     )
                # this function is triggered when you hit the month-menu, the function defines the buttons new
                async def select_callback(self,interaction,select): # the function called when the user is done selecting options
-                  if select.values[0] == "January": 
-                        await interaction.message.edit(view=buttons(interaction,week,set_month(1),year))
-                        await interaction.response.defer()
+                  if select.values[0] == "January":
+                        set_month(1)
+                        await interaction.message.edit(embed = await lecture_data(currentdate), view = embed_buttons())
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "February":
-                        await interaction.message.edit(view=buttons(interaction,week,set_month(2),year))
-                        await interaction.response.defer()
+                        set_month(2)
+                        await interaction.message.edit(embed = await lecture_data(currentdate), view = embed_buttons())
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "March":
+                        set_month(3)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(3),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "April":
+                        set_month(4)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(4),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "May":
+                        set_month(5)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(5),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "June":
+                        set_month(6)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(6),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "July":
+                        set_month(7)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(7),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "August":
+                        set_month(8)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(8),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "September":
+                        set_month(9)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(9),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "October":
+                        set_month(10)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(10),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
                   elif select.values[0] == "November":
+                        set_month(11)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(11),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
                   else:
+                        set_month(12)
                         await interaction.message.edit(view=buttons(interaction,week,set_month(12),year))
-                        await interaction.response.defer()
+                        if counter == 0:
+                            await interaction.response.defer()
 
 
 
