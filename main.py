@@ -15,6 +15,7 @@ with open('token.txt') as file:
 # bot declaration
 bot = commands.Bot(command_prefix="!",intents = discord.Intents.all())
 
+
 # ready-message
 @bot.event
 async def on_ready():
