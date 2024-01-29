@@ -41,7 +41,7 @@ async def on_ready():
 async def lecture(interaction: discord.ui.Button):
     global lecturecounter
     lecturecounter = 0
-    printing_lecture = await lecture_data(date.today()+timedelta(days=1))
+    printing_lecture = await lecture_data(date.today())
     global message    
     message = await interaction.response.send_message(embed=printing_lecture, view = embed_buttons())
 
@@ -262,7 +262,21 @@ async def lecture_data(date_entry):
         
         return embed
     except Exception as e:
-         print(e)
+         embed2 = discord.Embed(
+                            title = f"**An diesem Tag gibt es keine Vorlesung!!**",
+                            
+                            description="\n\n",
+                            color=0xD9A4FC        
+                            )
+                            # Creating a list wie all the lecture data and adding it to the "big list"
+                       
+         embed2.add_field(name="┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄",value="*Glückwunsch :)*")
+         embed2.set_thumbnail(url="https://cdn.discordapp.com/attachments/909054108235862066/1201514069161681026/sun-48213-removebg-preview.png?ex=65ca182d&is=65b7a32d&hm=ca6aa089f7f7b200e1a6cf63b24158d131524f7a18ae23208c0f9ef81d77342a&")
+         embed2.set_footer(text="Enjoy the weather!",icon_url="https://cdn.discordapp.com/attachments/909054108235862066/1178115964152328232/guycoding.png?ex=65beccfe&is=65ac57fe&hm=e434044069bea56e66c39fd651e713d7f189e84f069ad0f9ea89c98a012eaaac&")
+         embed2.set_image(url="https://cdn.discordapp.com/attachments/1179494047153389579/1201512263606079488/semesterferien1200x600.png?ex=65ca167e&is=65b7a17e&hm=d6c48c8298891637f99b48f7fb6ce4c28299346e48d0630319078453d7980b39&")
+         return embed2
+
+
     
     
 # class for creating embed_buttons
@@ -289,9 +303,8 @@ def buttons(interaction:discord.Interaction,week,month,year):
      # creating buttons
             global day
             day = 1
-            
-            counter = 0
             days = day + 7*(week-1)
+            global currentdate
             currentdate = datetime(int(year), month, days, 0, 0, 0, 0)
             buttons_view = View()
             for j in range(0,5):
@@ -320,13 +333,9 @@ async def buttons_callback(interaction: discord.Interaction):
             
 # the decorator that lets you specify the properties of the select menu
 class WeekSelectionView(discord.ui.View):
-    
     def __init__(self,interaction:discord.Interaction):
         super().__init__()
         self.select = WeekSelection()
-        global select
-        select = self.select
-
         self.add_item(self.select)
 
 def WeekSelection():
