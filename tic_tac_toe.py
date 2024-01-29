@@ -26,6 +26,8 @@ async def on_ready():
 mainColour = 0xa2c188
 embedGamesColour = 0xd9a4fc
 
+def returnPlayerTwo(player):
+    return player
 
 class start_button(discord.ui.View):
     def __init__(self, player1_id, **kwargs):
@@ -36,20 +38,21 @@ class start_button(discord.ui.View):
     async def challenge_start_callback(self, interaction:discord.Interaction, button):
         # Get the user who clicked the button (Player2)
         player2 = interaction.user
-
+        print(player2.id)
         # Get the information about the command initiator (Player1)
         player1 = await bot.fetch_user(self.player1_id)
-
-        # Update the message with the new embed mentioning both players
-        embed_challenge_accept = discord.Embed(
-            title="TTT-Game started",
-            description=f"<@{player1.id}> is playing against {player2.mention}",
-            color=embedGamesColour
-        )
-
-        # Update the message with the new embed
-        await interaction.message.edit(embed=embed_challenge_accept, view=None)
-
+        if player2 == player1:
+            return await interaction.response.send_message("You can't  play against yourself.", ephemeral=True)
+        else:
+            # Update the message with the new embed mentioning both players
+            embed_challenge_accept = discord.Embed(
+                title="TTT-Game started",
+                description=f"<@{player1.id}> is playing against {player2.mention}",
+                color=embedGamesColour
+            )
+            # Update the message with the new embed
+            await interaction.message.edit(embed=embed_challenge_accept, view=None)
+            returnPlayerTwo(player2=discord.user)
 
 async def startTTT(interaction: discord.Interaction):
     player1 = interaction.user
@@ -65,8 +68,10 @@ async def startTTT(interaction: discord.Interaction):
 @bot.tree.command(name="tictactoe", description="TicTacToe")
 async def ttt(interaction: discord.Interaction):
     # Get the user who triggered the slash command
-    startPlayer = interaction.user
-    startMsg = await startTTT(interaction)
+    player1 = await startTTT(interaction)
+    print(f"Player 1: {player1}")
+    player2 = await returnPlayerTwo()
+    print(f"Player 2: {player2}")
 
 
 # running bot with token
