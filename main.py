@@ -39,7 +39,7 @@ async def regular_lecture():
     # Get the current time
     now = datetime.now()
     # sends message when hour ist 18
-    if now.hour == 22:
+    if now.hour == 18:
         channel_id = 1201958342990508043  
         channel = bot.get_channel(channel_id)
         try:    
