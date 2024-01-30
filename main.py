@@ -26,7 +26,7 @@ async def on_ready():
     except Exception as e:
         print(e)
 
-# Lecture command for getting todays lecture-plan
+# lecture command for getting todays lecture plan
 @bot.tree.command(name="lecture")
 async def lecture(interaction: discord.ui.Button):
     global lecturecounter
@@ -35,5 +35,5 @@ async def lecture(interaction: discord.ui.Button):
     global message    
     message = await interaction.response.send_message(embed=printing_lecture, view = lecturedata.embed_buttons())
 
-# Running bot with token
+# running bot with token
 bot.run(token[0])

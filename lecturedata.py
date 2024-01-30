@@ -1,3 +1,14 @@
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+######                                                                                                 ###### 
+######      For questions concerning the lecture plan pls contact @alex1401 on discord                 ######
+######                                                                                                 ######
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+
+
 # imports and extensions
 from icalendar import Calendar
 from datetime import date, datetime, timedelta
@@ -9,6 +20,7 @@ import discord.utils
 import pytz
 import requests
 
+# declaring global variables
 global counter
 counter = 0
 lecturecounter = 0
@@ -19,48 +31,43 @@ month = 1
 year = date.today().year
 select = None
 day = 1
+
+# function for getting the first day of a month 
 def get_firstofmonth(month):
       firstofmonth = datetime(int(year), month, 1, 12, 0, 0, 0)
       return firstofmonth
 
+# function for chaning the month (global)
 def set_month(input):
        global month
        month = input
        return month
 
-def set_week(input):
-       global week
-       week = input
-       return week
-
-# Function called by buttonsclass (semi-copied)
+# function called by buttonsclass (semi-copied)
 def lecture_data(date_entry):
     cal_url = "https://stuv.app/MOS-TINF23A/ical"
     target_date = date_entry #style 2023, 12, 20
     response = requests.get(cal_url)
     if response.status_code == 200:
-                # Parsing the iCal data
+                # parsing the iCal data
                 cal_data = response.text
-                # Parse the iCal data using the icalendar library
+                # parse the iCal data using the icalendar library
                 cal = Calendar.from_ical(cal_data)
-                # Extract events from ical
-                #target_date = pytz.timezone("America/Los_Angeles")
                 target_date_events = []
                 for event in cal.walk('VEVENT'):
                         start_time = event.get('dtstart').dt
-                        # Comparing entry date with ALL dates
-                        
+                        # comparing entry date with ALL dates
                         if start_time.date()== target_date:
                             global lecturecounter
                             lecturecounter += 1
                             summary = event.get('summary')
                             end_time = event.get('dtend').dt
                             room = event.get('location')
-                            # Converting UTC+0 to UTC+1
+                            # converting UTC+0 to UTC+1
                             target_timezone = pytz.timezone('Europe/Paris')  # Replace with your target timezone
                             start_time = start_time.astimezone(target_timezone)
                             end_time = end_time.astimezone(target_timezone)
-                            # Adding data to target_date_events
+                            # adding data to target_date_events
                             target_date_events.append({
                                 'summary': summary,
                                 'start_time': start_time.strftime("%H:%M" + ' Uhr'),
@@ -69,7 +76,7 @@ def lecture_data(date_entry):
                             })
 
     lecture_lists = []
-    # Printing out all lectures for the fitting date through discord-embeds
+    # printing out all lectures for the fitting date through discord-embeds
     for event in (target_date_events):
                             embed = discord.Embed(
                             title = f"**Vorlesung vom *{date_entry.strftime("%d.%m.%Y")}***",
@@ -77,7 +84,7 @@ def lecture_data(date_entry):
                             description="\n\n",
                             color=0xD9A4FC        
                             )
-                            # Creating a list wie all the lecture data and adding it to the "big list"
+                            # creating a list with all the lecture data and adding it to the "big list"
                             lecture_info = [
                                 event['summary'],
                                 event['start_time'],
@@ -86,7 +93,7 @@ def lecture_data(date_entry):
                             ]
                             lecture_lists.append(lecture_info)
                  
-    # Adding the lecture data to the embed
+    # adding the lecture data to the embed
     try:    
         for i in range(lecturecounter):
             embed.add_field(name="┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄",value='',inline=True)
@@ -113,25 +120,25 @@ def lecture_data(date_entry):
 # class for creating embed_buttons
 class embed_buttons(discord.ui.View):
     interaction=discord.Interaction
+    # days-button on embed
     @discord.ui.button(custom_id = f"{interaction.id}~days_button",label="ay", style=discord.ButtonStyle.gray,row=1,emoji="🇩")
     async def days_callback(self, interaction:discord.Interaction, button):
             await interaction.response.defer()
-            await interaction.message.edit(view=buttons(interaction,week,month,datetime.today().strftime("%Y")),)
-        #await interaction.response.send_message(view=buttons(interaction,4,1,datetime.today().strftime("%Y")))
+            await interaction.message.edit(view=buttons(interaction,week,month,datetime.today().strftime("%Y")))
+    # weeks-button on embed
     @discord.ui.button(custom_id = f"{interaction.id}~week_button",label="eek", style=discord.ButtonStyle.gray,row=1,emoji="🇼")
     async def weeks_callback(self, interaction:discord.Interaction, button):
         await interaction.response.defer()
         global message
         message = await interaction.message.edit(view=WeekSelectionView(interaction))
-        #select.callback = lambda j: menu_callback(select,interaction) 
-    
+    # months-button on embed
     @discord.ui.button(custom_id = f"{interaction.id}~month:button",label="onth", style=discord.ButtonStyle.gray,row=1,emoji="🇲")
     async def month_callback(self, interaction:discord.Interaction, button):
         await interaction.response.defer()
         await interaction.message.edit(view=MonthSelection())
 
+# function for creating all buttons
 def buttons(interaction:discord.Interaction,week,month,year):
-     # creating buttons
             global day
             day = 1
             days = day + 7*(week-1)
@@ -150,6 +157,8 @@ def buttons(interaction:discord.Interaction,week,month,year):
                         buttons_view.add_item(j)
                         j.callback = lambda j: buttons_callback(j)
             return buttons_view
+
+# reaction for clicking a button is initialized by this function
 async def buttons_callback(interaction: discord.Interaction):
                       date = interaction.data['custom_id'].split('~')[1]
                       global lecturecounter
@@ -160,13 +169,13 @@ async def buttons_callback(interaction: discord.Interaction):
                       await interaction.response.defer()
                       await interaction.message.edit(embed = lecture_data(datetime.strptime(date,"%Y-%m-%d %H:%M:%S").date()),view = embed_buttons())
                          
-# the decorator that lets you specify the properties of the select menu
+# creating a selecting menu for the weeks
 class WeekSelectionView(discord.ui.View):
     def __init__(self,interaction:discord.Interaction):
         super().__init__()
         self.select = WeekSelection()
         self.add_item(self.select)
-
+# creating the data for selection and adding it to discord selection menu
 def WeekSelection():
                 global select
                 options = []
@@ -188,6 +197,7 @@ def WeekSelection():
                 select.callback = my_callback
                 return select
 
+# reaction for clicking on a week triggers this function
 async def my_callback(interaction):
                     global week
                     for i in range(1,6):
@@ -198,111 +208,41 @@ async def my_callback(interaction):
                     counter = 1   
                     await interaction.message.edit(view=buttons(interaction,week,month,year))
                     await interaction.response.defer()
-                
-# Function to generate dynamic month options
+            
+# function to generate selecting menu for months
 class MonthSelection(discord.ui.View):
-               @discord.ui.select( # the decorator that lets you specify the properties of the select menu 
-                    placeholder = "Choose a month!", # the placeholder text that will be displayed if nothing is selected
-                    min_values = 1, # the minimum number of values that must be selected by the users
-                    max_values = 1, # the maximum number of values that can be selected by the users
-                    options = [ # the list of options from which users can choose, a required field
-                    discord.SelectOption(
-                        label="January",
-                        description="first month"
-                    ),
-                    discord.SelectOption(
-                        label="February",
-                        description="second month"
-                    ),
-                    discord.SelectOption(
-                        label="March",
-                        description="third month"
-                    ),
-                    discord.SelectOption(
-                        label="April",
-                        description="fourth month"
-                    ),
-                    discord.SelectOption(
-                        label="May",
-                        description="fifth month"
-                    ),
-                    discord.SelectOption(
-                        label="June",
-                        description="sixth month"
-                    ),
-                    discord.SelectOption(
-                        label="July",
-                        description="seventh month"
-                    ),
-                    discord.SelectOption(
-                        label="August",
-                        description="eighth month"
-                    ),
-                    discord.SelectOption(
-                        label="September",
-                        description="nineth month"
-                    ),
-                    discord.SelectOption(
-                        label="October",
-                        description="tenth month"
-                    ),
-                    discord.SelectOption(
-                        label="November",
-                        description="eleventh month"
-                    ),
-                    discord.SelectOption(
-                        label="Dezember",
-                        description="twelveth month"
+    def __init__(self):
+        super().__init__()
+        self.select = Months()
+        self.add_item(self.select) 
+
+# creating the actual menu
+def Months():
+        global months
+        months = ["January","February","March","April","May","June","July","August","September","October","November","Dezember"]
+        options = []
+        for element in months:
+                option = discord.SelectOption(
+                    label = f"{element}",
+                    description = f"{str(int(months.index(element))+1)}. month"
                     )
-                        ]
+                options.append(option)
+        select_options2 = options
+        global select2
+        select2 = discord.ui.Select(
+                    placeholder = "Choose a month!",
+                    min_values = 1,
+                    max_values = 1,
+                    options = select_options2
                     )
-               # this function is triggered when you hit the month-menu, the function defines the buttons new
-               async def select_callback(self,interaction,select): # the function called when the user is done selecting options
-                  if select.values[0] == "January":
-                        set_month(1)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "February":
-                        set_month(2)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "March":
-                        set_month(3)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "April":
-                        set_month(4)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "May":
-                        set_month(5)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "June":
-                        set_month(6)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "July":
-                        set_month(7)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "August":
-                        set_month(8)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "September":
-                        set_month(9)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "October":
-                        set_month(10)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  elif select.values[0] == "November":
-                        set_month(11)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
-                  else:
-                        set_month(12)
-                        await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
-                        await interaction.response.defer()
+        select2.callback = my_callback2
+        return select2
+
+# function for answering to the reaction of clicking on a select option       
+async def my_callback2(interaction):
+        for i in range(len(months)):
+            if select2.values[0] == months[i]:
+                set_month(i+1)
+                await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
+                await interaction.response.defer()
+                    
