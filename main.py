@@ -5,6 +5,7 @@ import discord.utils
 from discord.ext import commands,tasks
 import discord.utils
 import lecturedata
+import dice
 
 # loading token
 with open('token.txt') as file:
@@ -33,7 +34,11 @@ async def lecture(interaction: discord.ui.Button):
     global message    
     message = await interaction.response.send_message(embed=printing_lecture, view = lecturedata.embed_buttons())
 
+@bot.tree.command(name="roll-a-dice")
+async def rolladice(interaction:discord.Interaction):
+  await interaction.response.send_message(embed=dice.dice_embed(dice.roll()))
 # printing lecture plan of the next day ever 24 hours
+  
 @tasks.loop(hours=24)
 async def regular_lecture():
     # Get the current time
@@ -50,6 +55,7 @@ async def regular_lecture():
                 print(e)
         await channel.send(embed=lecturedata.regular_data(date.today()+timedelta(days=1)))   
         print("done")
+
 
 # running bot with token
 bot.run(token[0])
