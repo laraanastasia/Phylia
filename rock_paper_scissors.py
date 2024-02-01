@@ -14,7 +14,7 @@ bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 # ready-message
 @bot.event
 async def on_ready():
-    print(f'{bot.user} is now online!')
+    print(f'{bot.user} is now online! - Rock Paper Scissors')
     status = discord.CustomActivity("Ich werde gerade programmiert ._.")
     await bot.change_presence(status=discord.Status.online, activity=status)
     print(f"Status set to: {status}!")
@@ -34,7 +34,7 @@ async def playRPS(interaction:discord.Interaction, choice: str):
         bot_choice = random.choice(choices)
 
         if choice.lower() not in choices:
-            await interaction.response.send_message("Invalid choice. Please choose rock, paper, or scissors.")
+            await interaction.response.send_message("Invalid choice. Please choose `rock`, `paper`, or `scissors`.")
             return
 
         if choice.lower() == bot_choice:
