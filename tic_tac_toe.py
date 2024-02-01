@@ -26,14 +26,6 @@ async def on_ready():
 mainColour = 0xa2c188
 embedGamesColour = 0xd9a4fc
 
-def setPlayerTwoID(playerID):
-    global playerPressID
-    playerPressID = playerID
-    print(f"global PlayerPressID: {playerPressID}")
-
-def getPlayerTwoID():
-    return playerPressID
-
 class start_button(discord.ui.View):
     def __init__(self, player1_id, **kwargs):
         super().__init__(**kwargs)
@@ -41,21 +33,36 @@ class start_button(discord.ui.View):
 
     @discord.ui.button(custom_id="challenge_start_button", label="I want to play!", style=discord.ButtonStyle.grey, row=1, emoji="<a:haken:1024262765721948251>")
     async def challenge_start_callback(self, interaction:discord.Interaction, button):
-        # Get the user who clicked the button (Player2)
-        player2 = interaction.user
-        print(f"Player 2 - challenge_start_callback: {player2}")
-        # Get the information about the command initiator (Player1)
-        print(f"Player 1 - challenge_start_callback: {self.player1_id}")
         player1 = await bot.fetch_user(self.player1_id)
+        player2 = interaction.user
+
         # Update the message with the new embed mentioning both players
         embed_challenge_accept = discord.Embed(
             title="TTT-Game started",
-            description=f"<@{player1.id}> is playing against {player2.mention}",
+            description=f"{player1.mention} is playing against {player2.mention} \n\n",
             color=embedGamesColour
         )
+
         # Update the message with the new embed
-        setPlayerTwoID(player2.id)
         await interaction.message.edit(embed=embed_challenge_accept, view=None)
+        #Neue Nachricht + 9 Buttons
+        winner = await gameStart(interaction, player1, player2)
+
+        #await interaction.edit_original_response(despcription=f"{player1.mention} vs. {player2.mention} \n\n{winner} won the game!")
+        
+async def gameStart(interaction:discord.Interaction, player1:discord.Interaction.user, player2:discord.Interaction.user):
+    #sendMsg + Buttons
+    #startEmbed + Button -> User drückt -> Nachricht edit + Id -> Neue Nachricht mit Game (ID nötig)
+    currentGame = f"{player1.mention} is currently playing against {player2.mention} \n\nIt's {player1.mention}'s turn"
+    gameEmbed = discord.Embed(
+            title="TTT-Game",
+            description=f"{currentGame}",
+            color=embedGamesColour
+        )
+    await interaction.channel.send(embed=gameEmbed)
+
+
+    #return winner
 
 async def startEmbed(interaction: discord.Interaction):
     player1 = interaction.user
@@ -66,7 +73,6 @@ async def startEmbed(interaction: discord.Interaction):
     )
     return embedStart
 
-
 @bot.tree.command(name="tictactoe", description="TicTacToe")
 async def ttt(interaction: discord.Interaction):
     # Get the user who triggered the slash command
@@ -74,12 +80,6 @@ async def ttt(interaction: discord.Interaction):
     startEmbedMessage = await startEmbed(interaction)
     await interaction.response.send_message(embed=startEmbedMessage, view=start_button(player1.id))
     print(f"Player 1 - ttt: {player1}")
-
-    player2 = await getPlayerTwoID()
-    print(f"Player 2 - ttt: {player2}")
-    
-    await interaction.message.edit(view=None)
-
 
 # running bot with token
 bot.run(token[0])
