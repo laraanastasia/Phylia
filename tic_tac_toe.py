@@ -12,7 +12,7 @@ bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 # ready-message
 @bot.event
 async def on_ready():
-    print(f'{bot.user} is now purring!')
+    print(f'{bot.user} is now online! TicTacToe')
     status = discord.CustomActivity("Ich werde gerade programmiert ._.")
     await bot.change_presence(status=discord.Status.online, activity=status)
     print(f"Status set to: {status}!")
@@ -26,8 +26,13 @@ async def on_ready():
 mainColour = 0xa2c188
 embedGamesColour = 0xd9a4fc
 
-def returnPlayerTwo(player):
-    return player
+def setPlayerTwoID(playerID):
+    global playerPressID
+    playerPressID = playerID
+    print(f"global PlayerPressID: {playerPressID}")
+
+def getPlayerTwoID():
+    return playerPressID
 
 class start_button(discord.ui.View):
     def __init__(self, player1_id, **kwargs):
@@ -38,40 +43,42 @@ class start_button(discord.ui.View):
     async def challenge_start_callback(self, interaction:discord.Interaction, button):
         # Get the user who clicked the button (Player2)
         player2 = interaction.user
-        print(player2.id)
+        print(f"Player 2 - challenge_start_callback: {player2}")
         # Get the information about the command initiator (Player1)
+        print(f"Player 1 - challenge_start_callback: {self.player1_id}")
         player1 = await bot.fetch_user(self.player1_id)
-        if player2 == player1:
-            return await interaction.response.send_message("You can't  play against yourself.", ephemeral=True)
-        else:
-            # Update the message with the new embed mentioning both players
-            embed_challenge_accept = discord.Embed(
-                title="TTT-Game started",
-                description=f"<@{player1.id}> is playing against {player2.mention}",
-                color=embedGamesColour
-            )
-            # Update the message with the new embed
-            await interaction.message.edit(embed=embed_challenge_accept, view=None)
-            returnPlayerTwo(player2=discord.user)
+        # Update the message with the new embed mentioning both players
+        embed_challenge_accept = discord.Embed(
+            title="TTT-Game started",
+            description=f"<@{player1.id}> is playing against {player2.mention}",
+            color=embedGamesColour
+        )
+        # Update the message with the new embed
+        setPlayerTwoID(player2.id)
+        await interaction.message.edit(embed=embed_challenge_accept, view=None)
 
-async def startTTT(interaction: discord.Interaction):
+async def startEmbed(interaction: discord.Interaction):
     player1 = interaction.user
-    embedTTT = discord.Embed(
+    embedStart = discord.Embed(
         title="TTT-Game search",
         description=f"{player1.mention} wants to play a TicTacToe game.\nWho wants to play against {player1.mention}",
         color=embedGamesColour
     )
-    await interaction.response.send_message(embed=embedTTT, ephemeral=False, view=start_button(player1.id))
-    return player1
+    return embedStart
 
 
 @bot.tree.command(name="tictactoe", description="TicTacToe")
 async def ttt(interaction: discord.Interaction):
     # Get the user who triggered the slash command
-    player1 = await startTTT(interaction)
-    print(f"Player 1: {player1}")
-    player2 = await returnPlayerTwo()
-    print(f"Player 2: {player2}")
+    player1 = interaction.user
+    startEmbedMessage = await startEmbed(interaction)
+    await interaction.response.send_message(embed=startEmbedMessage, view=start_button(player1.id))
+    print(f"Player 1 - ttt: {player1}")
+
+    player2 = await getPlayerTwoID()
+    print(f"Player 2 - ttt: {player2}")
+    
+    await interaction.message.edit(view=None)
 
 
 # running bot with token
