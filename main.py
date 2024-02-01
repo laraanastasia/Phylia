@@ -6,7 +6,7 @@ from discord.ext import commands,tasks
 import discord.utils
 import lecturedata
 import dice
-
+import password_generator
 # loading token
 with open('token.txt') as file:
     token = file.readlines()
@@ -38,7 +38,14 @@ async def lecture(interaction: discord.ui.Button):
 async def rolladice(interaction:discord.Interaction):
   await interaction.response.send_message(embed=dice.dice_embed(dice.roll()))
 # printing lecture plan of the next day ever 24 hours
-  
+
+@bot.tree.command(name="generate_password")
+async def generatepassword(interaction: discord.Interaction,length :int):
+     member = interaction.user
+     await member.send(password_generator.password(length))
+     await interaction.response.send_message(f"Password has been send to {member.global_name}", ephemeral=True)
+     
+
 @tasks.loop(hours=24)
 async def regular_lecture():
     # Get the current time
