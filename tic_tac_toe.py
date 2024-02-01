@@ -49,7 +49,44 @@ class start_button(discord.ui.View):
         winner = await gameStart(interaction, player1, player2)
 
         #await interaction.edit_original_response(despcription=f"{player1.mention} vs. {player2.mention} \n\n{winner} won the game!")
-        
+
+class game_button(discord.ui.View):
+    def __init__(self, player1, player2, **kwargs):
+        super().__init__(**kwargs)
+        self.player1 = player1
+        self.player2 = player2
+    number:int = 0
+    row:int = 0
+    value:int = 0
+
+    gameField=[{number:1, row:1, value:0},{number:2, row:1, value:0}, {number:3, row:1, value:0}, 
+              {number:4, row:2, value:0}, {number:5, row:2, value:0}, {number:6, row:2, value:0}, 
+              {number:7, row:3, value:0}, {number:8, row:3, value:0}, {number:9, row:3, value:0}
+    ]
+
+    def getFieldValue(list, number, key):
+        for dictionary in list:
+            print(dictionary)
+            if dictionary[number] == number:
+                # Found the dictionary with the desired id
+                output = dictionary[key]
+                print(f"The name for id {number} is: {output}")
+                return output
+            else:
+                # This block is executed if the loop completes without a break
+                print(f"No dictionary found with id {number}")
+
+    print(getFieldValue(gameField,  5, 'row'))
+    
+    @discord.ui.button(custom_id="tttButton", label="0", style=discord.ButtonStyle.grey, row=3, emoji="<a:haken:1024262765721948251>")
+    async def challenge_start_callback(self, interaction:discord.Interaction, button):
+        player1 = self.player1
+        player2 = self.player2
+        activPlayer = interaction.user
+        hasToPlay = player1
+        self.value = 5
+        self.stop
+
 async def gameStart(interaction:discord.Interaction, player1:discord.Interaction.user, player2:discord.Interaction.user):
     #sendMsg + Buttons
     #startEmbed + Button -> User drückt -> Nachricht edit + Id -> Neue Nachricht mit Game (ID nötig)
@@ -59,8 +96,8 @@ async def gameStart(interaction:discord.Interaction, player1:discord.Interaction
             description=f"{currentGame}",
             color=embedGamesColour
         )
-    await interaction.channel.send(embed=gameEmbed)
-
+    await interaction.channel.send(embed=gameEmbed, view=game_button(player1, player2))
+    view=game_button(player1, player2)
 
     #return winner
 
