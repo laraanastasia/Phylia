@@ -13,6 +13,8 @@ from discord import Intents, Client,Message
 import counting
 import minigames
 message = int
+
+
 # loading token
 with open('token.txt') as file:
     token = file.readlines()
@@ -55,9 +57,38 @@ async def generatepassword(interaction: discord.Interaction,length :int):
             await interaction.response.send_message(f"Wished password-length is too long, sorry :(",ephemeral = True)
 
      
-@bot.tree.command(name="start_counting")
+@bot.tree.command(name="start_counting",description="Count up but stay concentrated :)")
 async def start_counting(interaction:discord.Interaction):
-        counter = 0
+        global exit2
+        exit2 = 0
+        channel_id = interaction.channel.id
+        channel = bot.get_channel(channel_id)
+        global author
+        author = interaction.user
+        await interaction.response.send_message("Count up from **1**. *Wrong answers have consequences...*")
+        def check(message):
+             return message.author and message.channel and message.content.isdigit()
+        preNumber = 1
+        while True:
+                user_guess = await bot.wait_for('message', check=check,timeout=None)
+                number = int(user_guess.content)
+                if user_guess.author != author:
+                    if number == preNumber + 1:
+                        await user_guess.add_reaction("✅")
+                        preNumber = number
+                        author = user_guess.author
+                    else:
+                        await user_guess.add_reaction("❌")
+                        preNumber = preNumber - 5
+                        await channel.send(f"Uh ohhh, new number is **{preNumber}**. Fix your mistake <@{user_guess.author.id}> 😉")
+                        if preNumber <= 0:
+                            await channel.send(f"You lost...try again 😭")
+                            exit2 = 1
+                    if exit2 == 1:
+                        break
+                else: 
+                     await channel.send("Not so greedy! This is a team-game.")
+                        
 
 @bot.tree.command(name="guess_the_number",description="Guess a number between 'start' and 'length'!")
 async def guess_the_number(interaction:discord.Interaction,start: int, end:int):

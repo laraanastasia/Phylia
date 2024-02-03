@@ -109,8 +109,7 @@ def lecture_data(date_entry):
                             description="\n\n",
                             color=0xD9A4FC        
                             )
-                            # Creating a list wie all the lecture data and adding it to the "big list"
-                       
+        # Creating a list with all the lecture data and adding it to the "big list"               
          embed2.add_field(name="┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄",value="*Glückwunsch :)*")
          embed2.set_thumbnail(url="https://cdn.discordapp.com/attachments/909054108235862066/1201514069161681026/sun-48213-removebg-preview.png?ex=65ca182d&is=65b7a32d&hm=ca6aa089f7f7b200e1a6cf63b24158d131524f7a18ae23208c0f9ef81d77342a&")
          embed2.set_footer(text="Enjoy the weather!",icon_url="https://cdn.discordapp.com/attachments/909054108235862066/1178115964152328232/guycoding.png?ex=65beccfe&is=65ac57fe&hm=e434044069bea56e66c39fd651e713d7f189e84f069ad0f9ea89c98a012eaaac&")
