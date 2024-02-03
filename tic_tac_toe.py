@@ -50,56 +50,57 @@ class start_button(discord.ui.View):
 
         #await interaction.edit_original_response(despcription=f"{player1.mention} vs. {player2.mention} \n\n{winner} won the game!")
 
-class game_button(discord.ui.View):
-    def __init__(self, player1, player2, **kwargs):
-        super().__init__(**kwargs)
-        self.player1 = player1
-        self.player2 = player2
-    number:int = 0
-    row:int = 0
-    value:int = 0
+async def gameStart(interaction: discord.Interaction, player1: discord.Interaction.user, player2: discord.Interaction.user):
+    gameField = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    gameField=[{number:1, row:1, value:0},{number:2, row:1, value:0}, {number:3, row:1, value:0}, 
-              {number:4, row:2, value:0}, {number:5, row:2, value:0}, {number:6, row:2, value:0}, 
-              {number:7, row:3, value:0}, {number:8, row:3, value:0}, {number:9, row:3, value:0}
-    ]
+    async def update_game_field(button, player):
+        index = int(button.custom_id) - 1
+        if gameField[index] == 0:
+            gameField[index] = player
+            await button.edit(label="X" if player == 1 else "O", style=discord.ButtonStyle.green)
 
-    def getFieldValue(list, number, key):
-        for dictionary in list:
-            print(dictionary)
-            if dictionary[number] == number:
-                # Found the dictionary with the desired id
-                output = dictionary[key]
-                print(f"The name for id {number} is: {output}")
-                return output
-            else:
-                # This block is executed if the loop completes without a break
-                print(f"No dictionary found with id {number}")
+    async def check_winner():
+        # Check horizontal rows
+        for i in range(0, 9, 3):
+            if gameField[i] == gameField[i + 1] == gameField[i + 2] != 0:
+                return player1 if gameField[i] == 1 else player2
 
-    print(getFieldValue(gameField,  5, 'row'))
-    
-    @discord.ui.button(custom_id="tttButton", label="0", style=discord.ButtonStyle.grey, row=3, emoji="<a:haken:1024262765721948251>")
-    async def challenge_start_callback(self, interaction:discord.Interaction, button):
-        player1 = self.player1
-        player2 = self.player2
-        activPlayer = interaction.user
-        hasToPlay = player1
-        self.value = 5
-        self.stop
+        # Check vertical rows
+        for i in range(3):
+            if gameField[i] == gameField[i + 3] == gameField[i + 6] != 0:
+                return player1 if gameField[i] == 1 else player2
 
-async def gameStart(interaction:discord.Interaction, player1:discord.Interaction.user, player2:discord.Interaction.user):
-    #sendMsg + Buttons
-    #startEmbed + Button -> User drückt -> Nachricht edit + Id -> Neue Nachricht mit Game (ID nötig)
+        # Check diagonal rows
+        if gameField[0] == gameField[4] == gameField[8] != 0:
+            return player1 if gameField[0] == 1 else player2
+        if gameField[2] == gameField[4] == gameField[6] != 0:
+            return player1 if gameField[2] == 1 else player2
+
+        return None
+
     currentGame = f"{player1.mention} is currently playing against {player2.mention} \n\nIt's {player1.mention}'s turn"
     gameEmbed = discord.Embed(
-            title="TTT-Game",
-            description=f"{currentGame}",
-            color=embedGamesColour
-        )
-    await interaction.channel.send(embed=gameEmbed, view=game_button(player1, player2))
-    view=game_button(player1, player2)
+        title="TTT-Game",
+        description=f"{currentGame}",
+        color=embedGamesColour
+    )
 
-    #return winner
+    async def button_callback(interaction, button):
+        if interaction.user == player1 or interaction.user == player2:
+            await update_game_field(button, 1 if interaction.user == player1 else 2)
+            winner = await check_winner()
+            if winner:
+                await interaction.channel.send(f"{winner.mention} won the game!")
+            else:
+                await interaction.channel.send("Next player's turn.")
+
+    view = discord.ui.View()
+    for i in range(1, 10):
+        view.add_item(discord.ui.Button(custom_id=str(i), label=str(i), style=discord.ButtonStyle.grey, row=(i - 1) // 3 + 1))
+
+    await interaction.channel.send(embed=gameEmbed, view=view)
+    return await view.wait()
+
 
 async def startEmbed(interaction: discord.Interaction):
     player1 = interaction.user
