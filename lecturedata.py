@@ -15,7 +15,6 @@ from datetime import date, datetime, timedelta
 import discord
 import discord.utils
 from discord.ui import Button, View
-from discord.ext import commands
 import discord.utils
 import pytz
 import requests
@@ -224,7 +223,7 @@ def buttons(interaction:discord.Interaction,week,month,year):
                         temp2 = j
                         j = (Button(custom_id = f"{interaction.id}~{currentdate+timedelta(days=temp2)}",style=discord.ButtonStyle.green, label=str((currentdate+timedelta(days=j)).strftime("%d.%m")),row=1))
                         buttons_view.add_item(j)                             
-                        j.callback = lambda j: buttons_callback(j)                      
+                        j.callback = lambda j: buttons_callback(j)   # lambda: one-line function that points to the callback (when clicking button) in a fast anonymous way                  
                     else:
                         temp2 = j
                         j = (Button(custom_id = f"{interaction.id}~{currentdate+timedelta(days=temp2)}",style=discord.ButtonStyle.blurple, label=str((currentdate+timedelta(days=j)).strftime("%d.%m")),row=1))

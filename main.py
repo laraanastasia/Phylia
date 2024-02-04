@@ -1,5 +1,4 @@
 # imports and extensions
-import asyncio
 from datetime import date, datetime, timedelta
 import random
 import discord
@@ -7,10 +6,6 @@ import discord.utils
 from discord.ext import commands,tasks
 import discord.utils
 import lecturedata
-import dice
-import password_generator
-from discord import Intents, Client,Message
-import counting
 import minigames
 message = int
 
@@ -42,25 +37,27 @@ async def lecture(interaction: discord.ui.Button):
     global message    
     message = await interaction.response.send_message(embed=printing_lecture, view = lecturedata.embed_buttons())
 
+# roll-a-dice
 @bot.tree.command(name="roll-a-dice",description="You have a gambling addiction and love discord? Try both at the same time!")
 async def rolladice(interaction:discord.Interaction):
-  await interaction.response.send_message(embed=dice.dice_embed(dice.roll()))
-# printing lecture plan of the next day ever 24 hours
+  await interaction.response.send_message(embed=minigames.dice_embed(minigames.roll()))
 
+# password generator with user input
 @bot.tree.command(name="generate_password",description="Generate a password with the length of your choice!")
 async def generatepassword(interaction: discord.Interaction,length :int):
     member = interaction.user
     try: 
-            await member.send(password_generator.password(length))
+            await member.send(minigames.password(length))
             await interaction.response.send_message(f"Password has been sent to {member.global_name}.", ephemeral=True)
     except:
             await interaction.response.send_message(f"Wished password-length is too long, sorry :(",ephemeral = True)
 
-     
+# counting game
 @bot.tree.command(name="start_counting",description="Count up but stay concentrated :)")
 async def start_counting(interaction:discord.Interaction):
         global exit2
         exit2 = 0
+        # getting channel
         channel_id = interaction.channel.id
         channel = bot.get_channel(channel_id)
         global author
@@ -69,6 +66,7 @@ async def start_counting(interaction:discord.Interaction):
         def check(message):
              return message.author and message.channel and message.content.isdigit()
         preNumber = 1
+        # checking for next number
         while True:
                 user_guess = await bot.wait_for('message', check=check,timeout=None)
                 number = int(user_guess.content)
@@ -90,6 +88,7 @@ async def start_counting(interaction:discord.Interaction):
                      await channel.send("Not so greedy! This is a team-game.")
                         
 
+# guess the number game
 @bot.tree.command(name="guess_the_number",description="Guess a number between 'start' and 'length'!")
 async def guess_the_number(interaction:discord.Interaction,start: int, end:int):
         global exit 
@@ -100,6 +99,7 @@ async def guess_the_number(interaction:discord.Interaction,start: int, end:int):
         await interaction.response.send_message(f"Guess the number between {start} and {end}!")
         def check(message):
              return message.author and message.channel and message.content.isdigit()
+        # checking for next number
         while True:
             try:
                 user_guess = await bot.wait_for('message', check=check,timeout=30)
@@ -115,11 +115,12 @@ async def guess_the_number(interaction:discord.Interaction,start: int, end:int):
                 await channel.send(f"You lose...the number was {randNumber}.")
                 break
 
+# printing lecture plan of the next day ever 24 hours
 @tasks.loop(hours=24)
 async def regular_lecture():
     # Get the current time
     now = datetime.now()
-    # sends message when hour ist 18
+    # sends message if hour ist 18
     if now.hour == 18:
         channel_id = 1184076609779671111  
         channel = bot.get_channel(channel_id)
