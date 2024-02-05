@@ -14,9 +14,9 @@ bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 @bot.event
 async def on_ready():
     print(f'{bot.user} is now online! TicTacToe')
-    status = discord.CustomActivity("Ich werde gerade programmiert ._.")
+    status = discord.CustomActivity("Ich funktioniere!")
     await bot.change_presence(status=discord.Status.online, activity=status)
-    print(f"Status set to: {status}!")
+    print(f"Status set to: {status}")
 
     try:
         synced = await bot.tree.sync()
@@ -69,7 +69,7 @@ class TicTacToe(discord.ui.View):
         
         # Create 9 buttons
         for i in range(1, 10):
-            button = discord.ui.Button(custom_id=str(i), label=str(i), style=discord.ButtonStyle.secondary, row=(i - 1) // 3)
+            button = discord.ui.Button(custom_id=str(i), label="‎", style=discord.ButtonStyle.secondary, row=(i - 1) // 3)
             self.add_item(button)
             button.callback = lambda interaction, button=button: self.button_callback(interaction, button)
 
@@ -84,10 +84,10 @@ class TicTacToe(discord.ui.View):
             winner = await self.check_winner()
             if winner == player1 or winner == player2:
                 winEmbedMessage = await winEmbed(winner, player1 if winner == player2 else player2)
-                await interaction.response.edit_message(content=None, embed=winEmbedMessage, view=None)
+                await interaction.response.edit_message(content=None, embed=winEmbedMessage, view=newView)
             elif winner == "NoWinner":
                 embedTieMessage = await tieEmbed(player1, player2)
-                await interaction.response.edit_message(embed=embedTieMessage, view=None)
+                await interaction.response.edit_message(content=None, embed=embedTieMessage, view=newView)
             else:
                 next_player = player2 if current_player == player1 else player1  # Switch to the next player
                 embedGameMessage = await gameEmbed(next_player)
