@@ -8,12 +8,10 @@ import xlwings as xw
 import Karten
 import lecturedata
 import minigames
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 import random
 import discord.utils
 from discord.ext import commands,tasks
-import tic_tac_toe
-import rock_paper_scissors
 message = int
 
 # loading token
@@ -41,10 +39,10 @@ async def on_ready():
 
 @bot.tree.command(name="tictactoe", description="TicTacToe")
 async def tttGame(interaction: discord.Interaction):
-    await tic_tac_toe.ttt(interaction)
+    await minigames.ttt(interaction)
 @bot.tree.command(name="rock-paper-scissors", description="rock-paper-scissors")
 async def playRPS(interaction:discord.Interaction, choice: str):
-    await rock_paper_scissors.playRPS(interaction, choice)
+    await minigames.playRPS(interaction, choice)
 
 
 @bot.tree.command(name="temperatur", description="What is the weather forcast?")
