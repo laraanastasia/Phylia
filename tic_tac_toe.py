@@ -10,16 +10,16 @@ mainColour = 0xa2c188
 embedGamesColour = 0xd9a4fc
 
 class start_button(discord.ui.View):
-    def __init__(self, player1_id, **kwargs):
+    def __init__(self, player1, **kwargs):
         super().__init__(**kwargs)
-        self.player1_id = player1_id
+        self.player1 = player1
         self.player2 = None
         self.message = None
         self.current_player = None
 
     @discord.ui.button(custom_id="challenge_start_button", label="I want to play!", style=discord.ButtonStyle.grey, row=1, emoji="<a:haken:1024262765721948251>")
     async def challenge_start_callback(self, interaction:discord.Interaction, button):
-        player1 = await bot.fetch_user(self.player1_id)
+        player1 = self.player1
         if interaction.user != player1:  # Check if the user who clicked the button is not the same as the one who triggered the slash command
             self.player2 = interaction.user  # Set the player2 property here
             self.current_player = player1  # Set the current player to player1
@@ -160,5 +160,5 @@ async def ttt(interaction: discord.Interaction):
     # Get the user who triggered the slash command
     player1 = interaction.user
     startEmbedMessage = await startEmbed(player1)
-    start_button_view = start_button(player1.id)  # Create the view
+    start_button_view = start_button(player1)  # Create the view
     await interaction.response.send_message(embed=startEmbedMessage, view=start_button_view)
