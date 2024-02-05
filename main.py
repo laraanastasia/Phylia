@@ -1,33 +1,84 @@
-# imports and extensions
-from datetime import date, datetime, timedelta
-import random
+from typing import Final
+import os
 import discord
-import discord.utils
-from discord.ext import commands,tasks
-import discord.utils
+from discord import app_commands
+from discord.ext import commands
+import weather
+import xlwings as xw
+import Karten
 import lecturedata
 import minigames
-
+from datetime import date, datetime, timedelta
+import random
+import discord.utils
+from discord.ext import commands,tasks
+import tic_tac_toe
+import rock_paper_scissors
 message = int
-
 
 # loading token
 with open('token.txt') as file:
     token = file.readlines()
 
-# bot declaration
-bot = commands.Bot(command_prefix="!",intents = discord.Intents.all())
+intents = discord.Intents.default()
+intents.message_content = True #NOQA
+bot= commands.Bot(command_prefix="pythia",intents=intents)
+#client.remove_command("help")
 
-# ready-message
 @bot.event
 async def on_ready():
-    print("I am ready for work! ~Pyhlia")
+    print(f'{bot.user} is now ready!')
     try:
-        synced = await bot.tree.sync()
+        synced =await bot.tree.sync()
+        print(f"Synced {len(synced)} command(s)")
+        status = discord.CustomActivity("Use /help for help")
+        await bot.change_presence(status=discord.Status.online, activity=status)
+        print(f"Status set to: {status}")
         regular_lecture.start()
-        print(f"Currently listening to {len(synced)} command(s).")
+        ws= xw.Book("plzdoc.xlsx").sheets["Sheet1"]
     except Exception as e:
         print(e)
+
+@bot.tree.command(name="tictactoe", description="TicTacToe")
+async def tttGame(interaction: discord.Interaction):
+    await tic_tac_toe.ttt(interaction)
+@bot.tree.command(name="rock-paper-scissors", description="rock-paper-scissors")
+async def playRPS(interaction:discord.Interaction, choice: str):
+    await rock_paper_scissors.playRPS(interaction, choice)
+
+
+@bot.tree.command(name="temperatur", description="What is the weather forcast?")
+@app_commands.describe(plz="What is the postcode of your town?")
+async def temperatur(interaction: discord.Interaction,plz: str):
+    print(f"User: {interaction.user.name}, Plz: {plz}, Guild: {interaction.guild}, Channel: {interaction.channel}")
+    x=weather.feature(plz)
+    await interaction.response.send_message (f'Postalcode: {plz}', ephemeral=True)
+    await interaction.channel.send(embed=x)
+    
+@bot.tree.command(name="tarot",description="Whats your destiny?") 
+@app_commands.describe(amount="How many cards do you want to pull?")
+async def tarot(interaction: discord.Interaction,amount:int):
+    x= Karten.feature(amount)
+    await interaction.response.send_message (f'You pulled {amount} cards ', ephemeral=True)
+    await interaction.channel.send(embed=x)
+
+@bot.tree.command(name="tarot_with_cards",description="Whats your destiny (pictured)?") 
+@app_commands.describe(amount="Pull between 1 and 3 cards")
+async def tarot_with_cards(interaction: discord.Interaction,amount:int):
+    if amount==1:
+        await interaction.response.send_message (f'You pulled {amount} card ', ephemeral=True)
+        x= Karten.featureone(amount)
+        await interaction.channel.send(embeds=x)
+    elif amount==2:
+        await interaction.response.send_message (f'You pulled {amount} cards ', ephemeral=True)
+        x= Karten.featuretwo(amount)
+        await interaction.channel.send(embeds=x)
+    elif amount==3:
+        await interaction.response.send_message (f'You pulled {amount} cards ', ephemeral=True)
+        x= Karten.featurethree(amount)
+        await interaction.channel.send(embeds=x)
+    else:
+        await interaction.response.send_message (f'Please choose between 1 and 3 cards', ephemeral=True)
 
 # lecture command for getting todays lecture plan
 @bot.tree.command(name="lecture",description="Check the lecture plan!")
@@ -122,8 +173,8 @@ async def regular_lecture():
     # Get the current time
     now = datetime.now()
     # sends message if hour ist 18
-    if now.hour == 18:
-        channel_id = 1184076609779671111  
+    if now.hour == 11:
+        channel_id = 1201958342990508043  
         channel = bot.get_channel(channel_id)
         try:    
                 message = await channel.fetch_message(
@@ -131,9 +182,10 @@ async def regular_lecture():
                 await message.delete()
         except Exception as e:
                 print(e)
-        await channel.send(embed=lecturedata.regular_data(date.today()+timedelta(days=1)))   
+        await channel.send(embed=lecturedata.regular_data(date.today()))   
         print("done")
 
 
+    
 # running bot with token
 bot.run(token[0])
