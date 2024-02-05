@@ -2,6 +2,7 @@
 import discord
 from discord.ext import commands
 import tic_tac_toe
+import rock_paper_scissors
 
 # loading token
 with open('token.txt') as file:
@@ -26,6 +27,9 @@ async def on_ready():
 @bot.tree.command(name="tictactoe", description="TicTacToe")
 async def tttGame(interaction: discord.Interaction):
     await tic_tac_toe.ttt(interaction)
+@bot.tree.command(name="rock-paper-scissors", description="rock-paper-scissors")
+async def playRPS(interaction:discord.Interaction, choice: str):
+    await rock_paper_scissors.playRPS(interaction, choice)
 
 # running bot with token
 bot.run(token[0])
