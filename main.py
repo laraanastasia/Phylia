@@ -7,6 +7,7 @@ from discord.ext import commands,tasks
 import discord.utils
 import lecturedata
 import minigames
+
 message = int
 
 
