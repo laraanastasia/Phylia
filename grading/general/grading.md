@@ -11,16 +11,40 @@ Alle Kriterien betreffen nur die Projektarbeit. Beweismaterial kommt aus dem Gru
 ## FACHKOMPETENZ (40 Punkte)
 
 # Die Studierenden kennen die Grundelemente der prozeduralen Programmierung. (10)
-<!-- Siehe Kenntnisse in prozeduraler Programmierung: zutreffendes wählen und beweisen-->
+- Algorithmenbeschreibung
+
+- Datentypen
+
+- E/A-Operationen und Dateiverarbeitung
+
+- Operatoren
+
+- Kontrollstrukturen
+
+- Funktionen
+
+- Stringverarbeitung
+
+- Strukturierte Datentypen
 
 # Sie können die Syntax und Semantik von Python (10)
-<!-- Eine Stelle aus ihrem Programmieren wählen auf die sie besonders stolz sind und begründen -->
 
-Lara: 
-
-Alex: 
-
-Nico: 
+```python
+ buttons_view = View()
+            for j in range(0,5):
+                    if j % 2 != 0:
+                        temp2 = j
+                        j = (Button(custom_id = f"{interaction.id}~{currentdate+timedelta(days=temp2)}",style=discord.ButtonStyle.green, label=str((currentdate+timedelta(days=j)).strftime("%d.%m")),row=1))
+                        buttons_view.add_item(j)                             
+                        j.callback = lambda j: buttons_callback(j)   # lambda: one-line function that points to the callback (when clicking button) in a fast anonymous way                  
+                    else:
+                        temp2 = j
+                        j = (Button(custom_id = f"{interaction.id}~{currentdate+timedelta(days=temp2)}",style=discord.ButtonStyle.blurple, label=str((currentdate+timedelta(days=j)).strftime("%d.%m")),row=1))
+                        buttons_view.add_item(j)
+                        j.callback = lambda j: buttons_callback(j)
+            return buttons_view 
+```
+Warum sind wir stolz auf diesen Codeausschnitt: 
 
 
 # Sie können ein größeres Programm selbständig entwerfen, programmieren und auf Funktionsfähigkeit testen (Das Projekt im Team) (10)
@@ -33,21 +57,26 @@ Jedes Teammitglied entwickelte seinen Code auf einem branch (oder einem anderen 
 
 Aufteilung der Hauptfunktionen: 
 Tarot und Wetter - Lara
-TicTacToe - Nico
-Vorlesungsplan, zusätzliche Minigames - Alex
+TicTacToe, Rock-Paper-Scissor  - Nico
+(regelmäßiger) Vorlesungsplan, Minigames - Alex
 
-Getestet wurde immer, wenn eine Funktion fertig gestellt wurde von den zwei anderen Teammitgliedern (liebevoll Pentester genannt). Troubleshooting wurde wenn es verzwickt war  oft zu zweit und  manchmal sogar zu dritt betrieben. 
-
+Getestet wurde immer, wenn eine Funktion fertig gestellt wurde von den zwei anderen Teammitgliedern (liebevoll Pentester genannt). Troubleshooting wurde wenn es verzwickt war  oft zu zweit und  manchmal sogar zu dritt betrieben. (Z.B bei der Button-Lambda Funktion, klare Blicke auf doppelten Code)
 
 # Sie kennen verschiedene Datenstrukturen und können diese exemplarisch anwenden. (10)
 
-Dict to List :
+Dict to List (!!) :
 
 ![Alt Text](/screenshots/dict.png)
 
 ![Alt Text](/screenshots/list.png)
 
-Mehr Beispiele
+Ausnutzen der ganzzahligen integer Eigenschaft:
+
+![Alt Text](/screenshots/button.png)
+
+Stringkonvertierung eines hochgezählten Integers um dieses im Menü anzuzeigen.
+
+![Alt Text](/screenshots/index.png)
 
 ## METHODENKOMPETENZ (10 Punkte)
 
@@ -62,7 +91,7 @@ VSC:
 ![Alt Text](/screenshots/vsc.png)
 
 Copilot:
-Nico screen
+![Alt Text](/screenshots/copilot.png)
 
 ## PERSONALE UND SOZIALE KOMPETENZ (20 Punkte)
 
