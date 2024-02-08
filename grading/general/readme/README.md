@@ -3,7 +3,7 @@
 My creators are Nico, Alex and Lara :sparkles:
 
 ## How can I help you? 
-I´m really good at a lot things (really, you can believe me)
+I´m really good at a lot things (really, you can believe me:satisfied:)
 Here is a list of everything I do: 
 
 ### Lecture Plan 

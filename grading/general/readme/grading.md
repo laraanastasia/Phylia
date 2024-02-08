@@ -5,6 +5,8 @@
 In jedem Unterbereich werden die Punkte (gerne auch Links ins GIT) erklärt, wie das LO erreicht worden ist.
 Alle Kriterien betreffen nur die Projektarbeit. Beweismaterial kommt aus dem Gruppenprojekt.
 
+## Link zum Git
+[link](https://github.com/laraanastasia/Phylia)
 ## FACHKOMPETENZ (40 Punkte)
 
 # Die Studierenden kennen die Grundelemente der prozeduralen Programmierung. (10)
@@ -15,7 +17,19 @@ Alle Kriterien betreffen nur die Projektarbeit. Beweismaterial kommt aus dem Gru
 
 
 # Sie können ein größeres Programm selbständig entwerfen, programmieren und auf Funktionsfähigkeit testen (Das Projekt im Team) (10)
-<!-- Anhand von commits zeigen, wie jeder im Projekt einen Beitrag geleistet hat -->
+
+Zu Beginn wurde sich als Team zusammengesetzt und besprochen, wer welche Aufgaben erfüllen wird. 
+Jedes Teammitglied entwickelte seinen Code auf einem branch (oder einem anderen Repository (ausversehen..ups)) 
+[Alex sein Branch](https://github.com/laraanastasia/Phylia/tree/alex) 
+[Nico sein Branch](https://github.com/laraanastasia/Phylia/tree/realNico)
+[Lara ihr repository](https://github.com/laraanastasia/Phylia-temp)
+
+Aufteilung der Hauptfunktionen: 
+Tarot und Wetter - Lara
+TicTacToe - Nico
+Vorlesungsplan, zusätzliche Minigames - Alex
+
+Getestet wurde immer, wenn eine Funktion fertig gestellt wurde von den zwei anderen Teammitgliedern (liebevoll Pentester genannt). Troubleshooting wurde wenn es verzwickt war  oft zu zweit und  manchmal sogar zu dritt betrieben. 
 
 
 # Sie kennen verschiedene Datenstrukturen und können diese exemplarisch anwenden. (10)
