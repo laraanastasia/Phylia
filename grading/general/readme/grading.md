@@ -7,6 +7,7 @@ Alle Kriterien betreffen nur die Projektarbeit. Beweismaterial kommt aus dem Gru
 
 ## Link zum Git
 [link](https://github.com/laraanastasia/Phylia)
+
 ## FACHKOMPETENZ (40 Punkte)
 
 # Die Studierenden kennen die Grundelemente der prozeduralen Programmierung. (10)
@@ -14,6 +15,12 @@ Alle Kriterien betreffen nur die Projektarbeit. Beweismaterial kommt aus dem Gru
 
 # Sie können die Syntax und Semantik von Python (10)
 <!-- Eine Stelle aus ihrem Programmieren wählen auf die sie besonders stolz sind und begründen -->
+
+Lara: 
+
+Alex: 
+
+Nico: 
 
 
 # Sie können ein größeres Programm selbständig entwerfen, programmieren und auf Funktionsfähigkeit testen (Das Projekt im Team) (10)
@@ -33,22 +40,26 @@ Getestet wurde immer, wenn eine Funktion fertig gestellt wurde von den zwei ande
 
 
 # Sie kennen verschiedene Datenstrukturen und können diese exemplarisch anwenden. (10)
-<!-- Eine Stelle aus dem Projekt wählen auf die sie besonders stolz sind und begründen -->
 
+Dict to List : 
+![Alt Text](/screenshots/dict.png)
+![Alt Text](/screenshots/list.png)
 
+Mehr Beispiele
 
 ## METHODENKOMPETENZ (10 Punkte)
 
 # Die Studierenden können eine Entwicklungsumgebung verwenden um Programme zu erstellen (10)
 <!-- Beweise anbringen für Nutzen folgender Tools (können links, screenshots und screnncasts sein) -->
+Git: 
+![Alt Text](/screenshots/git.png)
+![Alt Text](/screenshots/gitlog.png)
 
-<!-- zB -->
-<!-- GIT -->
-<!-- VSC -->
-<!-- Copilot -->
-<!-- other -->
+VSC: 
+![Alt Text](/screenshots/vsc.png)
 
-
+Copilot:
+Nico screen
 
 ## PERSONALE UND SOZIALE KOMPETENZ (20 Punkte)
 
