@@ -40,7 +40,6 @@ class start_button(discord.ui.View):
         else:
             await interaction.response.send_message(":confused: You can't play against yourself. I am sorry!", ephemeral=True)
 
-
 class TicTacToe(discord.ui.View):
     def __init__(self, player1, player2, gameField, **kwargs):
         super().__init__(**kwargs)

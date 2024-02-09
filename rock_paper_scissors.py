@@ -14,35 +14,35 @@ async def playRPS(interaction:discord.Interaction, choice: str):
         choices = ["rock", "paper", "scissors"]
         bot_choice = random.choice(choices)
 
-        if choice.lower() not in choices:
+        if choice.lower().replace(" ", "") not in choices:
             await interaction.response.send_message("Invalid choice. Please choose `rock`, `paper`, or `scissors`.", ephemeral=True)
             return
 
-        if choice.lower() == bot_choice:
+        if choice.lower().replace(" ", "") == bot_choice:
             embedTie = discord.Embed(
                 title=f"It's a tie!",
-                description=f"Both chose `{choice.capitalize()}`.",
+                description=f"Both chose '{choice.capitalize().replace(' ', '')}'.",
                 color=embedGamesColour
             )
-            if choice.lower() == "rock":
+            if choice.lower().replace(" ", "") == "rock":
                 embedTie.set_thumbnail(url=rockEmoji)
-            elif choice.lower() == "paper":
+            elif choice.lower().replace(" ", "") == "paper":
                 embedTie.set_thumbnail(url=paperEmoji)
             else:
                 embedTie.set_thumbnail(url=scissorsEmoji)
             embedTie.set_footer(text="Use /rock-paper-scissors to start a new game.", icon_url="https://cdn.discordapp.com/attachments/1203830894050279435/1203831134522449920/Branding_Raged_alles_voll_2.png?ex=65d2861c&is=65c0111c&hm=eb56193f240d629c4e5e26810f85224801047c152164d5a4fcdcc15618d741ae&")
             await interaction.response.send_message(embed=embedTie)
-        elif (choice.lower() == "rock" and bot_choice == "scissors") or \
-             (choice.lower() == "paper" and bot_choice == "rock") or \
-             (choice.lower() == "scissors" and bot_choice == "paper"):
+        elif (choice.lower().replace(" ", "") == "rock" and bot_choice == "scissors") or \
+             (choice.lower().replace(" ", "") == "paper" and bot_choice == "rock") or \
+             (choice.lower().replace(" ", "") == "scissors" and bot_choice == "paper"):
             embedWin = discord.Embed(
                 title=f"You win!",
-                description=f"**{choice.capitalize()}** beats {bot_choice}.",
+                description=f"**{choice.capitalize().replace(' ', '')}** beats {bot_choice}.",
                 color=embedGamesColour
             )
-            if choice.lower() == "rock":
+            if choice.lower().replace(" ", "") == "rock":
                 embedWin.set_thumbnail(url=rockEmoji)
-            elif choice.lower() == "paper":
+            elif choice.lower().replace(" ", "") == "paper":
                 embedWin.set_thumbnail(url=paperEmoji)
             else:
                 embedWin.set_thumbnail(url=scissorsEmoji)
@@ -54,9 +54,9 @@ async def playRPS(interaction:discord.Interaction, choice: str):
                 description=f"**{bot_choice.capitalize()}** beats {choice}.",
                 color=embedGamesColour
             )
-            if bot_choice.lower() == "rock":
+            if bot_choice.lower().replace(" ", "") == "rock":
                 embedLoose.set_thumbnail(url=rockEmoji)
-            elif bot_choice.lower() == "paper":
+            elif bot_choice.lower().replace(" ", "") == "paper":
                 embedLoose.set_thumbnail(url=paperEmoji)
             else:
                 embedLoose.set_thumbnail(url=scissorsEmoji)
