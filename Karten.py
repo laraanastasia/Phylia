@@ -11,7 +11,7 @@ Pic="https://cdn.discordapp.com/attachments/1200206268594401371/1202179250032226
 #to show pictures. This is a total workaround but...it works. 
 #TLDR: Discord.py does not support the feature I needed so did some magic
 def feature(x):
-    y,d,f=ziehen(x)
+    y,d=ziehen(x)
     z= make_embed(x,y,d)
     return z
 
@@ -39,6 +39,7 @@ def ziehen(x):
         index= random.randint(0,78)
         Gezogen.append(Karten[index])
         Fotos.append(Pic[index])
+        #random chance to pull a reversed card
         rev= random.randint(0,1)
         if rev == 0:
             Bedeutungen.append(Bedeutung[index])

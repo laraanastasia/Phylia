@@ -6,7 +6,7 @@ import datetime
 def password(length):
     all = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!%&/><+-()@"
     password = ""
-    for i in range(length):
+    for _ in range(length):
         password += random.choice(all)
     return password
 
@@ -44,7 +44,6 @@ def dice_embed(choice):
     return embed
 
 # Tic Tac Toe
-
 mainColour = 0xa2c188
 embedGamesColour = 0xd9a4fc
 
@@ -59,20 +58,18 @@ class start_button(discord.ui.View):
     @discord.ui.button(custom_id="challenge_start_button", label="I want to play!", style=discord.ButtonStyle.grey, row=1, emoji="<a:haken:1024262765721948251>")
     async def challenge_start_callback(self, interaction:discord.Interaction, button):
         player1 = self.player1
-        if interaction.user != player1:  # Check if the user who clicked the button is not the same as the one who triggered the slash command
-            self.player2 = interaction.user  # Set the player2 property here
-            self.current_player = player1  # Set the current player to player1
+        if interaction.user != player1:
+            self.player2 = interaction.user
+            self.current_player = player1
             player2 = interaction.user
 
             self.message = interaction.message
 
-            # Update the message with the new embed mentioning both players
-            embed_challenge_accept = await startEmbed(player1) # get exactly the same embed as before + change the description
+            embed_challenge_accept = await startEmbed(player1)
             embed_challenge_accept.description = f":green_circle: {player1.mention} (X) is playing against :blue_circle: {player2.mention} (O)"
 
-            # Update the message with the new embed
+            
             await interaction.message.edit(embed=embed_challenge_accept, view=None)
-            # New message + 9 buttons
             gameField = [0, 0, 0, 0, 0, 0, 0, 0, 0]
             embedGame = await gameEmbed(player1)
             await interaction.channel.send(f"It's {player1.mention}'s turn.", embed=embedGame, view=TicTacToe(player1, player2, gameField))
@@ -86,21 +83,20 @@ class TicTacToe(discord.ui.View):
         self.player1 = player1
         self.player2 = player2
         self.gameField = gameField
-        self.current_player = player1  # Set the current player to player1 at start to player1
+        self.current_player = player1
         
-        # Create 9 buttons
         for i in range(1, 10):
             button = discord.ui.Button(custom_id=str(i), label="‎", style=discord.ButtonStyle.secondary, row=(i - 1) // 3)
             self.add_item(button)
             button.callback = lambda interaction, button=button: self.button_callback(interaction, button)
 
-
+    #function get triggered on button-click
     async def button_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
         player1 = self.player1
         player2 = self.player2
         current_player = self.current_player
 
-        if interaction.user == current_player:  # Check if the current player is making the move
+        if interaction.user == current_player:
             newView = await self.update_game_field(button, 1 if interaction.user == player1 else 2)
             winner = await self.check_winner()
             if winner == player1 or winner == player2:
@@ -110,10 +106,10 @@ class TicTacToe(discord.ui.View):
                 embedTieMessage = await tieEmbed(player1, player2)
                 await interaction.response.edit_message(content=None, embed=embedTieMessage, view=newView)
             else:
-                next_player = player2 if current_player == player1 else player1  # Switch to the next player
+                next_player = player2 if current_player == player1 else player1
                 embedGameMessage = await gameEmbed(next_player)
                 await interaction.response.edit_message(content=next_player.mention, embed=embedGameMessage, view=newView)
-                self.current_player = next_player  # Update the current player
+                self.current_player = next_player
         elif interaction.user == player1 or interaction.user == player2:
             await interaction.response.send_message(":confused: It's not your turn.", ephemeral=True)
         else:
@@ -133,22 +129,20 @@ class TicTacToe(discord.ui.View):
         player1 = self.player1
         player2 = self.player2
         gameField = self.gameField
-        # Check horizontal rows
-        for i in range(0, 9, 3): # 0, 3, 6
+
+        #check horizonatal, vertical and diagonal
+        for i in range(0, 9, 3):
             if gameField[i] == gameField[i + 1] == gameField[i + 2] != 0:
                 return player1 if gameField[i] == 1 else player2
-
-        # Check vertical rows
-        for i in range(3): # 0, 1, 2
+        for i in range(3):
             if gameField[i] == gameField[i + 3] == gameField[i + 6] != 0:
                 return player1 if gameField[i] == 1 else player2
-
-        # Check diagonal rows
         if gameField[0] == gameField[4] == gameField[8] != 0:
             return player1 if gameField[0] == 1 else player2
         if gameField[2] == gameField[4] == gameField[6] != 0:
             return player1 if gameField[2] == 1 else player2
         
+        #check tie
         full = True
         for i in range(9):
             if gameField[i] == 0:
@@ -158,6 +152,7 @@ class TicTacToe(discord.ui.View):
         else:
             return None
 
+#return embed of current game
 async def gameEmbed(userToMention: discord.User):
     embedGame = discord.Embed(
         title=f"Current game:",
@@ -166,6 +161,7 @@ async def gameEmbed(userToMention: discord.User):
     )
     return embedGame
 
+#return embed of tie
 async def tieEmbed(player1: discord.User, player2: discord.User):
     embedTie = discord.Embed(
         title=f"There is no winner!",
@@ -176,6 +172,7 @@ async def tieEmbed(player1: discord.User, player2: discord.User):
     embedTie.set_footer(text="Use /tictactoe to start a new game.", icon_url="https://cdn.discordapp.com/attachments/1203830894050279435/1203831134522449920/Branding_Raged_alles_voll_2.png?ex=65d2861c&is=65c0111c&hm=eb56193f240d629c4e5e26810f85224801047c152164d5a4fcdcc15618d741ae&")
     return embedTie
 
+#return embed of win
 async def winEmbed(winner: discord.User, looser: discord.User):
     embedWin = discord.Embed(
         title=f"The Winner is {winner} !",
@@ -186,21 +183,24 @@ async def winEmbed(winner: discord.User, looser: discord.User):
     embedWin.set_footer(text="Use /tictactoe to start a new game.", icon_url="https://cdn.discordapp.com/attachments/1203830894050279435/1203831134522449920/Branding_Raged_alles_voll_2.png?ex=65d2861c&is=65c0111c&hm=eb56193f240d629c4e5e26810f85224801047c152164d5a4fcdcc15618d741ae&")
     return embedWin
 
+#return embed of game request
 async def startEmbed(player1: discord.user):
     embedStart = discord.Embed(
         title="TTT-Game search",
         description=f"{player1.mention} wants to play a TicTacToe game.\nWho wants to play against {player1.mention}",
         color=embedGamesColour,
-        timestamp=datetime.datetime.now()  # Set the timestamp to the current time
+        timestamp=datetime.datetime.now()
     )
     return embedStart
 
 async def ttt(interaction: discord.Interaction):
-    # Get the user who triggered the slash command
     player1 = interaction.user
     startEmbedMessage = await startEmbed(player1)
-    start_button_view = start_button(player1)  # Create the view
+    start_button_view = start_button(player1)
     await interaction.response.send_message(embed=startEmbedMessage, view=start_button_view)
+
+
+
 
 # rock paper scissor
     

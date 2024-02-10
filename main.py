@@ -1,9 +1,8 @@
 from typing import Final
-import os
 import discord
 from discord import app_commands
 from discord.ext import commands
-import 
+import weather
 import xlwings as xw
 import Karten
 import lecturedata
@@ -12,6 +11,7 @@ from datetime import date, datetime
 import random
 import discord.utils
 from discord.ext import commands,tasks
+import asyncio
 message = int
 
 # loading token
@@ -40,6 +40,8 @@ async def on_ready():
 @bot.tree.command(name="tic_tac_toe", description="TicTacToe")
 async def tttGame(interaction: discord.Interaction):
     await minigames.ttt(interaction)
+
+
 @bot.tree.command(name="rock_paper_scissors", description="rock-paper-scissors")
 async def playRPS(interaction:discord.Interaction, choice: str):
     await minigames.playRPS(interaction, choice)
@@ -50,7 +52,7 @@ async def playRPS(interaction:discord.Interaction, choice: str):
 async def temperatur(interaction: discord.Interaction,plz: str):
     print(f"User: {interaction.user.name}, Plz: {plz}, Guild: {interaction.guild}, Channel: {interaction.channel}")
     x=weather.feature(plz)
-    await interaction.response.send_message (f'Postalcode: {plz}', ephemeral=True)
+    await interaction.response.send_message (f'Postleitzahl: {plz}', ephemeral=False)
     await interaction.channel.send(embed=x)
     
 @bot.tree.command(name="tarot",description="Whats your destiny?") 
@@ -177,8 +179,8 @@ async def regular_lecture():
     # Get the current time
     now = datetime.now()
     # sends message if hour ist 18
-    if now.hour == 11:
-        channel_id = 1201958342990508043  
+    if now.hour == 18:
+        channel_id = 1205109949487775834  
         channel = bot.get_channel(channel_id)
         try:    
                 message = await channel.fetch_message(
@@ -188,6 +190,31 @@ async def regular_lecture():
                 print(e)
         await channel.send(embed=lecturedata.regular_data(date.today()))   
         print("done")
+
+@bot.event
+async def on_voice_state_update(user, before, after):
+    category_id = 1205482189203185705  # ID der Kategorie
+    trigger_channel_id = 1205482294991917066  #  ID des Voice Channels
+
+    if after.channel and after.channel.id == trigger_channel_id:
+        category = bot.get_channel(category_id)
+        user = user
+
+        # Name des Kanals
+        channel_name = f"{user.display_name}s Channel"
+
+        # moved den user in den temporären Kanal
+        new_channel = await category.create_voice_channel(channel_name)
+        await user.move_to(new_channel)
+
+        # plant, dass der Channel nach 5 Sekunden gelöscht wird, wenn kein user mehr im Channel ist
+        await asyncio.sleep(5) # braucht man nicht unbedingt
+
+#überprüfen ob der Channel noch existiert und ob sich noch jemand im Channel befindet
+        while new_channel.members:
+            await asyncio.sleep(10)
+
+        await new_channel.delete()
 
 
 
