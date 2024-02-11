@@ -1,3 +1,14 @@
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+######                                                                                                 ###### 
+######      For questions concerning the lecture plan pls contact @lara_anastasia on discord           ######
+######                                                                                                 ######
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+
+
 import random
 import discord
 #Normally, I would safe this data in files but Discord.py threw a huge tantrum when I tried to read from a file....please excuse these awfully huge lists
@@ -79,7 +90,7 @@ def make_embed_two(x,Karten,Bedeutungen,y):
         
     for i in range(x):
         embed.add_field(name=Karten[i], value=f"{'-'*5}\nReading:\n {Bedeutungen[i]}\n{'-'*5}", inline=False)
-    
+    #this is the "bug abuse" part- since I give the diff. embeds the same url, Discords "merges" them together (who knows how long this will keep working haha)
     embed1= discord.Embed(url="https://insighttimer.com/blog/what-is-tarot/")
     embed1.set_image(url=y[0])
     embed2= discord.Embed(url="https://insighttimer.com/blog/what-is-tarot/")

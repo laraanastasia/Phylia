@@ -3,7 +3,7 @@
 My creators are Nico, Alex and Lara :sparkles:
 
 ## How can I help you? 
-I´m really good at a lot things (really, you can believe me :satisfied: )
+I´m really good at a lot of things (really, you can believe me :satisfied: )
 Here is a list of everything I do: 
 
 ### Lecture Plan 
@@ -27,4 +27,4 @@ Here is a list of everything I do:
 - /roll_a_dice - roll a dice
 - /start_counting - count up! how far will your team make it ? :wink:
 - /tic_tac_toe - play tic-tac-toe against another user
-- /generate_password[length]
+- /generate_password  [length]

@@ -42,7 +42,7 @@ def set_month(input):
        month = input
        return month
 
-# function called by buttonsclass (semi-copied)
+# function called by buttonsclass (semi-copied from daily coding)
 def lecture_data(date_entry):
     cal_url = "https://stuv.app/MOS-TINF23A/ical"
     target_date = date_entry #style 2023, 12, 20
@@ -63,7 +63,7 @@ def lecture_data(date_entry):
                             end_time = event.get('dtend').dt
                             room = event.get('location')
                             # converting UTC+0 to UTC+1
-                            target_timezone = pytz.timezone('Europe/Paris')  # Replace with your target timezone
+                            target_timezone = pytz.timezone('Europe/Paris')  
                             start_time = start_time.astimezone(target_timezone)
                             end_time = end_time.astimezone(target_timezone)
                             # adding data to target_date_events
@@ -115,7 +115,7 @@ def lecture_data(date_entry):
          embed2.set_image(url="https://cdn.discordapp.com/attachments/1179494047153389579/1201512263606079488/semesterferien1200x600.png?ex=65ca167e&is=65b7a17e&hm=d6c48c8298891637f99b48f7fb6ce4c28299346e48d0630319078453d7980b39&")
          return embed2
     
-# function for printing regular lecture plan
+# function for printing regular lecture plan (semi-copied from daily coding)
 def regular_data(date_entry2):
     global lecturecounter
     lecturecounter = 0
