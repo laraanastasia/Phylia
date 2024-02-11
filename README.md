@@ -1,4 +1,4 @@
-# Hello! I'm Phylia :dizzy:
+# Hello! I'm Pyhlia :dizzy:
 
 My creators are Nico, Alex and Lara :sparkles:
 
