@@ -1,3 +1,14 @@
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+######                                                                                                 ###### 
+######      For questions concerning the lecture plan pls contact @lara_anastasia on discord           ######
+######                                                                                                 ######
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+
+
 import openmeteo_requests
 import requests_cache
 import pandas as pd
@@ -13,8 +24,10 @@ def feature(plz:str):
     max=data["maximum"].tolist()
     min=data["minimum"].tolist()
     dates_clean= [datetime.strftime(ts, '%d-%m-%Y') for ts in date]
+    #formating
     max_clean= ["{:.2f}".format(number) for number in max]
     min_clean= ["{:.2f}".format(number) for number in min]
+    #remove the first entry, scince it is the dates for yesterday 
     dates_clean.pop(0)
     max_clean.pop(0)
     min_clean.pop(0)

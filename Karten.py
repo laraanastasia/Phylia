@@ -1,3 +1,14 @@
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+######                                                                                                 ###### 
+######      For questions concerning the lecture plan pls contact @lara_anastasia on discord           ######
+######                                                                                                 ######
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+
+
 import random
 import discord
 #Normally, I would safe this data in files but Discord.py threw a huge tantrum when I tried to read from a file....please excuse these awfully huge lists
@@ -11,7 +22,7 @@ Pic="https://cdn.discordapp.com/attachments/1200206268594401371/1202179250032226
 #to show pictures. This is a total workaround but...it works. 
 #TLDR: Discord.py does not support the feature I needed so did some magic
 def feature(x):
-    y,d,f=ziehen(x)
+    y,d=ziehen(x)
     z= make_embed(x,y,d)
     return z
 
@@ -39,6 +50,7 @@ def ziehen(x):
         index= random.randint(0,78)
         Gezogen.append(Karten[index])
         Fotos.append(Pic[index])
+        #random chance to pull a reversed card
         rev= random.randint(0,1)
         if rev == 0:
             Bedeutungen.append(Bedeutung[index])
@@ -78,7 +90,7 @@ def make_embed_two(x,Karten,Bedeutungen,y):
         
     for i in range(x):
         embed.add_field(name=Karten[i], value=f"{'-'*5}\nReading:\n {Bedeutungen[i]}\n{'-'*5}", inline=False)
-    
+    #this is the "bug abuse" part- since I give the diff. embeds the same url, Discords "merges" them together (who knows how long this will keep working haha)
     embed1= discord.Embed(url="https://insighttimer.com/blog/what-is-tarot/")
     embed1.set_image(url=y[0])
     embed2= discord.Embed(url="https://insighttimer.com/blog/what-is-tarot/")

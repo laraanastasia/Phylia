@@ -42,7 +42,7 @@ def set_month(input):
        month = input
        return month
 
-# function called by buttonsclass (semi-copied)
+# function called by buttonsclass (semi-copied from daily coding)
 def lecture_data(date_entry):
     cal_url = "https://stuv.app/MOS-TINF23A/ical"
     target_date = date_entry #style 2023, 12, 20
@@ -63,7 +63,7 @@ def lecture_data(date_entry):
                             end_time = event.get('dtend').dt
                             room = event.get('location')
                             # converting UTC+0 to UTC+1
-                            target_timezone = pytz.timezone('Europe/Paris')  # Replace with your target timezone
+                            target_timezone = pytz.timezone('Europe/Paris')  
                             start_time = start_time.astimezone(target_timezone)
                             end_time = end_time.astimezone(target_timezone)
                             # adding data to target_date_events
@@ -115,7 +115,7 @@ def lecture_data(date_entry):
          embed2.set_image(url="https://cdn.discordapp.com/attachments/1179494047153389579/1201512263606079488/semesterferien1200x600.png?ex=65ca167e&is=65b7a17e&hm=d6c48c8298891637f99b48f7fb6ce4c28299346e48d0630319078453d7980b39&")
          return embed2
     
-# function for printing regular lecture plan
+# function for printing regular lecture plan (semi-copied from daily coding)
 def regular_data(date_entry2):
     global lecturecounter
     lecturecounter = 0
@@ -212,24 +212,36 @@ class embed_buttons(discord.ui.View):
 
 # function for creating all buttons
 def buttons(interaction:discord.Interaction,week,month,year):
+            # first the days are calculated
             global day
             day = 1
             days = day + 7*(week-1)
+            # global current date so I can use it everywhere (actually useful)
             global currentdate
             currentdate = datetime(int(year), month, days, 0, 0, 0, 0)
             buttons_view = View()
-            for j in range(0,5):
+            # here happens the magic: for-loop iterates 7 times so each iteration creates one button
+            for j in range(0,7):
+                    # if-else-construction only differs in the color of the buttons which are being created (could be easily improved into smaller code but I think this is easier to understand)
                     if j % 2 != 0:
                         temp2 = j
-                        j = (Button(custom_id = f"{interaction.id}~{currentdate+timedelta(days=temp2)}",style=discord.ButtonStyle.green, label=str((currentdate+timedelta(days=j)).strftime("%d.%m")),row=1))
-                        buttons_view.add_item(j)                             
+                        # the button creation with elements id, color and text on button
+                        j = (Button(custom_id = f"{interaction.id}~{currentdate+timedelta(days=temp2)}",style=discord.ButtonStyle.green, label=str((currentdate+timedelta(days=j)).strftime("%d.%m"))))
+                        # adding the button to the "buttons-collection" (= view)
+                        buttons_view.add_item(j)
+                        # adding the callback-function (if you click on a button the callback gets triggered)                            
                         j.callback = lambda j: buttons_callback(j)   # lambda: one-line function that points to the callback (when clicking button) in a fast anonymous way                  
+                    # this part does the same as the one above but it differs in the buttoncolor
                     else:
                         temp2 = j
-                        j = (Button(custom_id = f"{interaction.id}~{currentdate+timedelta(days=temp2)}",style=discord.ButtonStyle.blurple, label=str((currentdate+timedelta(days=j)).strftime("%d.%m")),row=1))
+                        j = (Button(custom_id = f"{interaction.id}~{currentdate+timedelta(days=temp2)}",style=discord.ButtonStyle.blurple, label=str((currentdate+timedelta(days=j)).strftime("%d.%m"))))
                         buttons_view.add_item(j)
                         j.callback = lambda j: buttons_callback(j)
+            # returning the "buttons-collection" so I can make them visible
             return buttons_view
+# I am very proud of this part of the code since I had to hardcode it in the first attempts of the project but over the time I managed to create them dynamically. The main problem was always to 
+# dynamically add a callback to each button. The callback was always attached to the ID of the last button. To fix this problem I had to use the lambda function which points directly on the
+# callback (that helped me a lot). I was very happy when I had found that useful function (lambda)
 
 # reaction for clicking a button is initialized by this function
 async def buttons_callback(interaction: discord.Interaction):
@@ -254,7 +266,7 @@ def WeekSelection():
                 options = []
                 for i in range(1, 5 + 1):
                     first_day = get_firstofmonth(month)+timedelta(days=7*(i-1))
-                    last_day = first_day+timedelta(days=4)
+                    last_day = first_day+timedelta(days=6)
 
                     option = discord.SelectOption(
                         label=f"Week {i}",
@@ -318,4 +330,3 @@ async def my_callback2(interaction):
                 set_month(i+1)
                 await interaction.message.edit(embed = lecture_data(currentdate), view = embed_buttons())
                 await interaction.response.defer()
-                    
