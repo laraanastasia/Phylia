@@ -57,7 +57,7 @@ def getcordinats(plz:str):
     return x
 
 #disclamer 
-#following code was given by the weather API- I made minimal changes to it to fit our project 
+#following code was given by the weather API (AI generator inside the API documentation)- I made minimal changes to it to fit our project 
 def getweather(lat,long):
     x=lat
     y=long
