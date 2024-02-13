@@ -414,7 +414,7 @@ await interaction.channel.send([...] view=TicTacToe(player1, player2, gameField)
 Probleme: 
 ### Team management
 - Missverständnisse, es wurde öfters aneinander vorbei geredet. Konnte aber durch ein Sitdown gelöst werden. Die Gruppenmoral stieg danach stark an. 
-- Zeitmanagement, es war ziemlich schwierig Termine zu finden an denen jeder Zeit hatte. Konnte teilweise gelöst werden, indem einfache Probleme asynchron geklärt wurden und die Mehrheit der Teammitglieder für große Probleme Zeit geschaffen hat. 
+- Zeitmanagement, es war ziemlich schwierig Termine zu finden an denen jeder Zeit hatte. Konnte teilweise gelöst werden, indem einfache Probleme asynchron geklärt wurden. 
 
 ###  Implementation
 - Inkompatible Imports zwischen Funktionen (Ical und Openmeteo_requests). Konnte durch einen Interpreterabgleich gelöst werden. Hätte durch regelmäßigen mergen einfacher auffindbar sein können.  
