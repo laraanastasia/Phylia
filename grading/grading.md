@@ -241,9 +241,9 @@ Jedes Teammitglied entwickelte seinen Code auf einem branch (oder einem anderen 
 [Lara ihr repository](https://github.com/laraanastasia/Phylia-temp)
 
 Aufteilung der Hauptfunktionen: 
-Tarot und Wetter - Lara
-TicTacToe, Rock-Paper-Scissor  - Nico
-(regelmäßiger) Vorlesungsplan, Minigames - Alex
+- Tarot und Wetter - Lara
+- TicTacToe, Rock-Paper-Scissor  - Nico
+- (regelmäßiger) Vorlesungsplan, Minigames - Alex
 
 Getestet wurde immer, wenn eine Funktion fertig gestellt wurde von den zwei anderen Teammitgliedern (liebevoll Pentester genannt). Troubleshooting wurde wenn es verzwickt war  oft zu zweit und  manchmal sogar zu dritt betrieben. (Z.B bei der Button-Lambda Funktion, klare Blicke auf doppelten Code)
 
@@ -278,18 +278,18 @@ Copilot:
 ![alt Text](/screenshots/copilot.png)
 
 Terminal:
-![alt text](terminal.png)
+![alt text](/screenshots/terminal.png)
 
 ## PERSONALE UND SOZIALE KOMPETENZ (20 Punkte)
 
 # Die Studierenden können ihre Software erläutern und begründen. (5)
 
-Lara -> Nico (GIT) Nico: "Ich kann jetzt aus dem Terminal Git nutzen dank Lara uWu" 
-Lara -> Alex (GIT) Alex: "Lara hat mich in die Künste des terminalbasierten Commitens eingeführt :P"
-Nico -> Alex (Discord Embeds) Alex: "Dank Nico kann ich nur durch den Anblick meiner Embeds Leute verzaubern"
-Nico -> Lara (Server-Management) Lara: "Nico hat mir die Vorteile Discord-Admin zu sein gezeigt :3"
-Alex -> Nico (Button) Nico: "Alex hat mir geholfen Buttons korrekt zu erstellen, damit der Callback funktioniert :D"
-Alex -> Lara (Bot-Initialisierung) Lara: "Mein Bot ist nun stets startklar dank Alex' Support 0^0"
+- Lara -> Nico (GIT) Nico: "Ich kann jetzt aus dem Terminal Git nutzen dank Lara uWu"        
+- Lara -> Alex (GIT) Alex: "Lara hat mich in die Künste des terminalbasierten Commitens eingeführt :P"    
+- Nico -> Alex (Discord Embeds) Alex: "Dank Nico kann ich nur durch den Anblick meiner Embeds Leute verzaubern"    
+- Nico -> Lara (Server-Management) Lara: "Nico hat mir die Vorteile Discord-Admin zu sein gezeigt :3"    
+- Alex -> Nico (Button) Nico: "Alex hat mir geholfen Buttons korrekt zu erstellen, damit der Callback funktioniert :D"     
+- Alex -> Lara (Bot-Initialisierung) Lara: "Mein Bot ist nun stets startklar dank Alex' Support 0^0"  
 
 # Sie können existierenden Code analysieren und beurteilen. (5)
 <!-- Pro Gruppe:You have critiqued another group project. Link to your critique here (another wiki page on your git) and link the project in the critique, use these evaluation criteria to critique the other project. Make sure they get a top grade after making the suggested changes -->
