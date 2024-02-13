@@ -293,6 +293,8 @@ Terminal:
 
 # Sie können existierenden Code analysieren und beurteilen. (5)
 <!-- Pro Gruppe:You have critiqued another group project. Link to your critique here (another wiki page on your git) and link the project in the critique, use these evaluation criteria to critique the other project. Make sure they get a top grade after making the suggested changes -->
+Unsere Bewertung an tower_defence ist im Ordner grading zu finden. 
+[wiki](https://github.com/laraanastasia/Phylia/wiki/Peer%E2%80%90review-für-tower_defence)
 
 # Sie können sich selbstständig in Entwicklungsumgebungen und Technologien einarbeiten und diese zur Programmierung und Fehlerbehebung einsetzen. (10)
 <!-- Which technology did you learn outside of the teacher given input -->
